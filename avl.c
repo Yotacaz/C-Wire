@@ -14,7 +14,8 @@ typedef struct struct_nd             //raccourcie qui ralonge
 
 typedef Noeud *pAVL;
 
-//fonction
+//FONCTIONS 
+
 int min2(int a, int b){
     return a < b ? a : b;                //si a < b alors retourner a sinon retourner b
 }
@@ -43,6 +44,9 @@ int min3(int a, int b, int c)
     return min2(b, c);
 }
 
+/// @brief initialise la racine d'un avl avec valeur en param
+/// @param val valeur d'initialisation
+/// @return la racine de l'avl
 pAVL creerAVL(int val)
 {
     pAVL avl = malloc(sizeof(Noeud));
