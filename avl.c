@@ -14,13 +14,6 @@ typedef struct struct_nd
 
 typedef Noeud *pAVL;
 
-// int abs(int val){
-//     if (val>= 0){
-//         return val;
-//     }
-//     return -val;
-// }
-
 int min2(int a, int b)
 {
     return a < b ? a : b;
