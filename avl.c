@@ -6,17 +6,17 @@
 
 typedef struct struct_nd
 {
-    int eq;
-    int val;
+    int eq;                            //equilibre
+    int val;                            //valeur
     struct struct_nd *fg;
     struct struct_nd *fd;
 } Noeud;
 
 typedef Noeud *pAVL;
 
-int min2(int a, int b)
-{
-    return a < b ? a : b;
+//fonction
+int min2(int a, int b){
+    return a < b ? a : b;                //si a < b alors retourner a sinon retourner b
 }
 
 
@@ -54,21 +54,17 @@ pAVL creerAVL(int val)
     return avl;
 }
 
-// COPY PASTA
-
 bool existe_fd(Noeud *nd)
 {
-    assert(nd); // cas pas pris en charge
+    assert(nd);                                 // cas pas pris en charge
     return nd->fd != NULL;
 }
 
 bool existe_fg(Noeud *nd)
 {
-    assert(nd); // cas pas pris en charge
+    assert(nd);                                 // cas pas pris en charge
     return nd->fg != NULL;
 }
-
-// ENDOF COPY PASTA
 
 // Affichage de l'arbre en mode horizontal
 void afficherAVL(pAVL nd, int niveau)
