@@ -389,6 +389,11 @@ pAVL suppRand(pAVL avl, int *tab, int size)
     return avl;
 }
 
+/// @brief genere des avl effectue des operation aleatoire et verifie la validite de l'avl
+/// @param min 
+/// @param max 
+/// @param size 
+/// @return l'avl apres des opperations
 pAVL randAVLTest(int min, int max, int size)
 {
     assert(size > 0);
