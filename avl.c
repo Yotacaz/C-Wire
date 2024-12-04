@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-typedef struct struct_nd
+typedef struct struct_nd             //raccourcie qui ralonge
 {
     int eq;                            //equilibre
     int val;                            //valeur
