@@ -57,8 +57,8 @@ pAVL creerAVL(Donnee_station val)
     avl->eq = 0;
     avl->fd = NULL;
     avl->fg = NULL;
-    avl->val->ID_station = val.ID_station;
-    avl->val->conso = val.conso;
+    avl->val.ID_station = val.ID_station;
+    avl->val.conso = val.conso;
     avl->val.capacite = val.capacite;
     return avl;
 }
@@ -95,7 +95,7 @@ void afficherAVL(pAVL nd, int niveau)
            "\x1B[0;34m"
            "%d\n"
            "\x1B[0m",
-           nd->val->ID_station,nd->val->conso, nd->eq);
+           nd->val.ID_station,nd->val.conso, nd->eq);
 
     // Affiche ensuite le sous-arbre gauche
     afficherAVL(nd->fg, niveau + 1);
@@ -194,17 +194,7 @@ Noeud *equilibrageAVL(Noeud *nd)
         {
             return doubleRotationGauche(nd);
         }
-        return rotationGauche(nd);
-    }
-    else if (nd->eq == -2)
-    {
-        assert(nd->fg);
-        if (nd->fg->eq == 1)
-        {
-            return doubleRotationDroite(nd);
-        }
-        return rotationDroite(nd);
-    }
+        return rotationGauche(nd);https://github.com/Yotacaz/C-Wire/blob/main/avl.c
     return nd; // aucun equilibrage necessaire
 }
 
@@ -222,12 +212,12 @@ Noeud *insertionAVLrec(Noeud *nd, Donnee_station val, int *h)
         *h = 1;
         return creerAVL(val);
     }
-    else if (nd->val->ID_station > val->ID_station)
+    else if (nd->val.ID_station > val.ID_station)
     {
         nd->fg = insertionAVLrec(nd->fg, val, h);
         *h = -*h; //<=> *h = -abs(*h)
     }
-    else if (nd->val->ID_station < val->ID_station)
+    else if (nd->val.ID_station < val.ID_station)
     {
         nd->fd = insertionAVLrec(nd->fd, val, h);
         //(*h = h)
@@ -261,7 +251,7 @@ Noeud *suppMax(Noeud *nd, int *max, int *h)
     assert(h);
     if (!nd->fd)
     {
-        *max = nd->val->ID_station;
+        *max = nd->val.ID_station;
         *h = -1; // on sup un elem qui se situe a droite
         Noeud *tmp = nd->fg;
         free(nd);
@@ -291,21 +281,21 @@ Noeud *suppValAVLrec(Noeud *nd, Donnee_station val, int *h)
         *h = 0;
         return nd;
     }
-    else if (nd->val->ID_station > val->ID_station)
+    else if (nd->val.ID_station > val.ID_station)
     {
         nd->fg = suppValAVLrec(nd->fg, val, h);
         //(*h = h)
     }
     else if (nd->val < val)
     {
-        nd->fd = suppValAVLrec(nd->fd, val->ID_station, h);
+        nd->fd = suppValAVLrec(nd->fd, val.ID_station, h);
         *h = -*h; //(*h) devient negatif
     }
     else
     {
         if (existe_fg(nd))
         {
-            nd->fg = suppMax(nd->fg, &(nd->val->ID_station), h); // supprime le max de gauche
+            nd->fg = suppMax(nd->fg, &(nd->val.ID_station), h); // supprime le max de gauche
             *h = -*h;                                // suppMax modifie *h en une valeur neg/nulle
         }
         else
@@ -359,8 +349,8 @@ int *unique_rand_tab(int min, int max, int size)
     Donnee_station *tab = malloc(sizeof(Donnee_station) * size);
     assert(tab);
     Donnee_station rand_val;
-    rand_val->ID_station = 0;
-    rand_val->conso = 0;
+    rand_val.ID_station = 0;
+    rand_val.conso = 0;
     rand_val.capacite = 0;
     bool in_tab = true;
     for (int i = 0; i < size; i++)
@@ -368,8 +358,8 @@ int *unique_rand_tab(int min, int max, int size)
         in_tab = true;
         while (in_tab) // bruteforce
         {
-            rand_val->ID_station = rand() % delta + min;
-            rand_val->conso = rand() % delta + min;
+            rand_val.ID_station = rand() % delta + min;
+            rand_val.conso = rand() % delta + min;
             rand_val.capacite = rand() % delta + min;
             in_tab = false;
             for (int j = 0; j < i; j++)
