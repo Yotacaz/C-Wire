@@ -78,13 +78,13 @@ void afficherAVL(pAVL nd, int niveau)
         return;
     }
 
-    // Affiche d'abord le sous-arbre droit (pour un effet visuel en "arbre")
+    // Affiche d'abord le sous-arbre droit (car affichage horizontal)
     afficherAVL(nd->fd, niveau + 1);
 
     // Affiche le noeud actuel avec indentation
     for (int i = 0; i < niveau; i++)
     {
-        printf("     "); // Ajoute des espaces pour indenter
+        printf("     "); // indentation
     }
     printf("%d "
            "\x1B[0;34m"
