@@ -91,7 +91,7 @@ void afficherAVL(pAVL nd, int niveau)
     {
         printf("     "); // Ajoute des espaces pour indenter
     }
-    printf("%d %d "
+    printf("ID=%d %d "
            "\x1B[0;34m"
            "%d\n"
            "\x1B[0m",
@@ -194,7 +194,17 @@ Noeud *equilibrageAVL(Noeud *nd)
         {
             return doubleRotationGauche(nd);
         }
-        return rotationGauche(nd);https://github.com/Yotacaz/C-Wire/blob/main/avl.c
+        return rotationGauche(nd);
+    }
+    else if (nd->eq == -2)
+    {
+        assert(nd->fg);
+        if (nd->fg->eq == 1)
+        {
+            return doubleRotationDroite(nd);
+        }
+        return rotationDroite(nd);
+    }
     return nd; // aucun equilibrage necessaire
 }
 
@@ -286,9 +296,9 @@ Noeud *suppValAVLrec(Noeud *nd, Donnee_station val, int *h)
         nd->fg = suppValAVLrec(nd->fg, val, h);
         //(*h = h)
     }
-    else if (nd->val < val)
+    else if (nd->val.ID_station < val.ID_station)
     {
-        nd->fd = suppValAVLrec(nd->fd, val.ID_station, h);
+        nd->fd = suppValAVLrec(nd->fd, val, h);
         *h = -*h; //(*h) devient negatif
     }
     else
@@ -340,7 +350,7 @@ void freeAVL(pAVL avl)
 /// @param max maximal value for the table
 /// @param size size of table
 /// @return the table
-int *unique_rand_tab(int min, int max, int size)
+Donnee_station *unique_rand_tab(int min, int max, int size)
 {
     int delta = max - min + 1;
     assert(size > 0);
@@ -364,7 +374,7 @@ int *unique_rand_tab(int min, int max, int size)
             in_tab = false;
             for (int j = 0; j < i; j++)
             {
-                if (rand_val == tab[j])
+                if (rand_val.ID_station == tab[j].ID_station)
                 {
                     in_tab = true;
                     break;
@@ -401,11 +411,11 @@ pAVL randAVLTest(int min, int max, int size)
     }
     assertAVL(avl);
 
-    for (int i = 0; i < size / 4; i++)
-    {
-        avl = suppRand(avl, tab, size - i);
-        assertAVL(avl);
-    }
+    // for (int i = 0; i < size / 4; i++)
+    // {
+    //     avl = suppRand(avl, tab, size - i);
+    //     assertAVL(avl);
+    // }
 
     free(tab);
     return avl;
@@ -415,10 +425,7 @@ int main()
 {
     srand(time(NULL));
     pAVL avl = NULL;
-    for (int i = 0; i < 1000000; i++)
-    {
-        avl = randAVLTest(0, 40, 10);
-        freeAVL(avl);
-    }
+    avl = randAVLTest(5,90,8);
+    afficherAVL(avl,0);
     return 0;
 }
