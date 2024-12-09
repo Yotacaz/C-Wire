@@ -1,5 +1,5 @@
-# C-Wire
-Un projet de groupe d'école pour gérer la distribution sur des réseaux électriques de plusieurs centrales.
+# **C-Wire**
+**Un projet de groupe d'école pour gérer la distribution sur des réseaux électriques de plusieurs centrales.**
 
 Pour commencer, .................
 
