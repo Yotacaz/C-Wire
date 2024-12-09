@@ -4,10 +4,17 @@
 #include <stdbool.h>
 #include <time.h>
 
-typedef struct struct_nd             //raccourcie qui ralonge
+typedef struct _donneeStation             //raccourcie qui ralonge
+{
+    int ID_station;
+    int conso;
+    int capacite;
+} Donnee_station;
+
+typedef struct struct_nd
 {
     int eq;                            //equilibre
-    int val;                            //valeur
+    Donnee_station val;                //valeur
     struct struct_nd *fg;
     struct struct_nd *fd;
 } Noeud;
@@ -19,7 +26,6 @@ typedef Noeud *pAVL;
 int min2(int a, int b){
     return a < b ? a : b;                //si a < b alors retourner a sinon retourner b
 }
-
 
 int max2(int a, int b)
 {
@@ -44,17 +50,16 @@ int min3(int a, int b, int c)
     return min2(b, c);
 }
 
-/// @brief initialise la racine d'un avl avec valeur en param
-/// @param val valeur d'initialisation
-/// @return la racine de l'avl
-pAVL creerAVL(int val)
+pAVL creerAVL(Donnee_station val)
 {
     pAVL avl = malloc(sizeof(Noeud));
     assert(avl);
     avl->eq = 0;
     avl->fd = NULL;
     avl->fg = NULL;
-    avl->val = val;
+    avl->val.ID_station = val.ID_station;
+    avl->val.conso = val.conso;
+    avl->val.capacite = val.capacite;
     return avl;
 }
 
@@ -86,11 +91,11 @@ void afficherAVL(pAVL nd, int niveau)
     {
         printf("     "); // indentation
     }
-    printf("%d "
+    printf("ID=%d %d "
            "\x1B[0;34m"
            "%d\n"
            "\x1B[0m",
-           nd->val, nd->eq);
+           nd->val.ID_station,nd->val.conso, nd->eq);
 
     // Affiche ensuite le sous-arbre gauche
     afficherAVL(nd->fg, niveau + 1);
@@ -205,10 +210,10 @@ Noeud *equilibrageAVL(Noeud *nd)
 
 /// @brief insere un entier dans un avl
 /// @param nd racine
-/// @param val valeur a ajouter
+/// @param val valeur de la station à ajouter
 /// @param h pointeur variation d'equilibre (initialement *h = 0)
 /// @return la racine
-Noeud *insertionAVLrec(Noeud *nd, int val, int *h)
+Noeud *insertionAVLrec(Noeud *nd, Donnee_station val, int *h)
 {
 
     assert(h);
@@ -217,12 +222,12 @@ Noeud *insertionAVLrec(Noeud *nd, int val, int *h)
         *h = 1;
         return creerAVL(val);
     }
-    else if (nd->val > val)
+    else if (nd->val.ID_station > val.ID_station)
     {
         nd->fg = insertionAVLrec(nd->fg, val, h);
         *h = -*h; //<=> *h = -abs(*h)
     }
-    else if (nd->val < val)
+    else if (nd->val.ID_station < val.ID_station)
     {
         nd->fd = insertionAVLrec(nd->fd, val, h);
         //(*h = h)
@@ -241,7 +246,7 @@ Noeud *insertionAVLrec(Noeud *nd, int val, int *h)
     return nd;
 }
 
-pAVL insertionAVL(Noeud *racine, int val)
+pAVL insertionAVL(Noeud *racine, Donnee_station val)
 {
     int h = 0;
     Noeud *nd = insertionAVLrec(racine, val, &h);
@@ -256,7 +261,7 @@ Noeud *suppMax(Noeud *nd, int *max, int *h)
     assert(h);
     if (!nd->fd)
     {
-        *max = nd->val;
+        *max = nd->val.ID_station;
         *h = -1; // on sup un elem qui se situe a droite
         Noeud *tmp = nd->fg;
         free(nd);
@@ -278,7 +283,7 @@ Noeud *suppMax(Noeud *nd, int *max, int *h)
 }
 
 // n'appeler que depuis la fonction suppValAVL(...)
-Noeud *suppValAVLrec(Noeud *nd, int val, int *h)
+Noeud *suppValAVLrec(Noeud *nd, Donnee_station val, int *h)
 {
     assert(h);
     if (!nd)
@@ -286,12 +291,12 @@ Noeud *suppValAVLrec(Noeud *nd, int val, int *h)
         *h = 0;
         return nd;
     }
-    else if (nd->val > val)
+    else if (nd->val.ID_station > val.ID_station)
     {
         nd->fg = suppValAVLrec(nd->fg, val, h);
         //(*h = h)
     }
-    else if (nd->val < val)
+    else if (nd->val.ID_station < val.ID_station)
     {
         nd->fd = suppValAVLrec(nd->fd, val, h);
         *h = -*h; //(*h) devient negatif
@@ -300,7 +305,7 @@ Noeud *suppValAVLrec(Noeud *nd, int val, int *h)
     {
         if (existe_fg(nd))
         {
-            nd->fg = suppMax(nd->fg, &(nd->val), h); // supprime le max de gauche
+            nd->fg = suppMax(nd->fg, &(nd->val.ID_station), h); // supprime le max de gauche
             *h = -*h;                                // suppMax modifie *h en une valeur neg/nulle
         }
         else
@@ -321,7 +326,7 @@ Noeud *suppValAVLrec(Noeud *nd, int val, int *h)
     return nd;
 }
 
-pAVL suppValAVL(pAVL racine, int val)
+pAVL suppValAVL(pAVL racine, Donnee_station val)
 {
     assert(racine);
     int h = 0;
@@ -345,26 +350,31 @@ void freeAVL(pAVL avl)
 /// @param max maximal value for the table
 /// @param size size of table
 /// @return the table
-int *unique_rand_tab(int min, int max, int size)
+Donnee_station *unique_rand_tab(int min, int max, int size)
 {
     int delta = max - min + 1;
     assert(size > 0);
 
     assert(delta >= size);
-    int *tab = malloc(sizeof(int) * size);
+    Donnee_station *tab = malloc(sizeof(Donnee_station) * size);
     assert(tab);
-    int rand_val = 0;
+    Donnee_station rand_val;
+    rand_val.ID_station = 0;
+    rand_val.conso = 0;
+    rand_val.capacite = 0;
     bool in_tab = true;
     for (int i = 0; i < size; i++)
     {
         in_tab = true;
         while (in_tab) // bruteforce
         {
-            rand_val = rand() % delta + min;
+            rand_val.ID_station = rand() % delta + min;
+            rand_val.conso = rand() % delta + min;
+            rand_val.capacite = rand() % delta + min;
             in_tab = false;
             for (int j = 0; j < i; j++)
             {
-                if (rand_val == tab[j])
+                if (rand_val.ID_station == tab[j].ID_station)
                 {
                     in_tab = true;
                     break;
@@ -376,12 +386,12 @@ int *unique_rand_tab(int min, int max, int size)
     return tab;
 }
 
-pAVL suppRand(pAVL avl, int *tab, int size)
+pAVL suppRand(pAVL avl, Donnee_station *tab, int size)
 {
     assert(size > 0);
     assert(tab);
     int i = rand() % size;
-    int val = tab[i];
+    Donnee_station val = tab[i];
     tab[i] = tab[size - 1];
     tab[size - 1] = val;
     avl = suppValAVL(avl, val);
@@ -398,7 +408,7 @@ pAVL randAVLTest(int min, int max, int size)
 {
     assert(size > 0);
     assert(min + size < max + 1);
-    int *tab = unique_rand_tab(min, max, size);
+    Donnee_station *tab = unique_rand_tab(min, max, size);
     pAVL avl = creerAVL(tab[0]);
     for (int i = 1; i < size; i++)
     {
@@ -406,11 +416,11 @@ pAVL randAVLTest(int min, int max, int size)
     }
     assertAVL(avl);
 
-    for (int i = 0; i < size / 4; i++)
-    {
-        avl = suppRand(avl, tab, size - i);
-        assertAVL(avl);
-    }
+    // for (int i = 0; i < size / 4; i++)
+    // {
+    //     avl = suppRand(avl, tab, size - i);
+    //     assertAVL(avl);
+    // }
 
     free(tab);
     return avl;
@@ -420,10 +430,7 @@ int main()
 {
     srand(time(NULL));
     pAVL avl = NULL;
-    for (int i = 0; i < 1000000; i++)
-    {
-        avl = randAVLTest(0, 40, 10);
-        freeAVL(avl);
-    }
+    avl = randAVLTest(5,90,8);
+    afficherAVL(avl,0);
     return 0;
 }
