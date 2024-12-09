@@ -4,9 +4,11 @@
 #include <stdbool.h>
 #include <time.h>
 
-//#include "avl.h"
+// #include "avl.h"
+#include "utiles.h"
 
-int main(){
-
+int main()
+{
+  test();
   return 0;
 }
