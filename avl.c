@@ -7,7 +7,7 @@
 typedef struct _donneeStation             //raccourcie qui ralonge
 {
     int ID_station;
-    int conso;
+    int consomation;
     int capacite;
 } Donnee_station;
 
