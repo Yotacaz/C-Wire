@@ -25,33 +25,26 @@ if [ $# -lt 3 ]; then
   exit 1
 fi
 
-chemin=$1
-station=$2
-consommateur=$3
+chemin="$1"
+station="$2"
+consommateur="$3"
+filtre_centrales="${*:4}"
 error=0
 if [ ! -f "$chemin" ]; then
   echo "ERREUR: Le fichier \"$chemin\" n'existe pas"
   error=1
 fi
 
-id_station=""
-case $station in
-  hvb) id_station=2 ;;
-  hva) id_station=3 ;;
-  lv) id_station=4 ;;
-  *) echo "ERREUR: La station doit être \"hvb\", \"hva\" ou \"lv\". Vous avez saisi \"$station\"" ;;
-esac
+if ! in_array "$station" hvb hva lv; then
+  echo "ERREUR: La station doit être \"hvb\", \"hva\" ou \"lv\". Vous avez saisi \"$station\""
+  error=1
+fi
 
-id_consommateur=""
-case $consommateur in
-  comp) id_consommateur=4 ;;
-  indiv) id_consommateur=5 ;;
-  all) id_consommateur="both" ;;
-  *) echo "ERREUR: Le consommateur doit être \"comp\", \"indiv\" ou \"all\". Vous avez saisi \"$consommateur\"" ;;
-esac
+if ! in_array "$consommateur" comp indiv all; then
+  echo "ERREUR: Le consommateur doit être \"comp\", \"indiv\" ou \"all\". Vous avez saisi \"$consommateur\""
+  error=1
+fi
 
-# combinaisons_invalides=("hvb-all" "hvb-indiv" "hva-all" "hva-indiv")
-# if in_array "$station-$consommateur" "${combinaisons_invalides[@]}"; then
 if in_array "$station-$consommateur" hvb-all hvb-indiv hva-all hva-indiv; then
   echo "ERREUR: Vous ne pouvez pas avoir un consommateur \"$consommateur\" avec une station \"$station\""
   error=1
@@ -61,3 +54,29 @@ if [ $error -eq 1 ]; then
   aide
   exit 1
 fi
+
+# Format des données en entrée :
+# |  1  |  2  |  3  |  4  |  5  |  6  |  7  |   8   |
+# |-----+-----+-----+-----+-----+-----+-----+-------|
+# | idc |  -  |  -  |  -  |  -  |  -  | cap |   -   | Centrale (id et production maximale / capacite)
+# | idc | idb |  -  |  -  |  -  |  -  | cap |   -   | Station HV-B (id centrale, id hvb et capacite)
+# | idc | idb |  -  |  -  | ide |  -  |  -  | conso | Entreprise sur HV-B (id centrale, id hvb, id entp et consommation)
+# | idc | idb | ida |  -  |  -  |  -  | cap |   -   | Station HV-A (id centrale, id hvb, id hva et capacite)
+# | idc |  -  | ida |  -  | ide |  -  |  -  | conso | Entreprise sur HV-A (id centrale, id hva, id entp et consommation)
+# | idc |  -  | ida | idv |  -  |  -  | cap |   -   | Poste LV (id centrale, id hva, id lv et capacite)
+# | idc |  -  |  -  | idv | ide |  -  |  -  | conso | Entreprise sur LV (id centrale, id lv, id entp et consommation)
+# | idc |  -  |  -  | idv |  -  | idp |  -  | conso | Particulier sur LV (id centrale, id lv, id particulier et consommation)
+
+id_station=""
+case "$station" in
+  hvb) id_station=2 ;;
+  hva) id_station=3 ;;
+  lv) id_station=4 ;;
+esac
+
+filtre="^[^-]"
+if [ -n "$filtre_centrales" ]; then
+  filtre="^($(echo "$filtre_centrales" | tr ' ' '|'))+;"
+fi
+
+cat "$chemin" | tail -n+2 | cut -d ";" -f "$id_station,7,8" | grep -E "$filtre" | tr '-' '0'
