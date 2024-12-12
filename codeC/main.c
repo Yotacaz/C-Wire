@@ -9,7 +9,6 @@
 
 int main()
 {
-  test();
-  printf("je me suis fait executé !");
+  printf("2:30:233\n");
   return 0;
 }

@@ -5,6 +5,7 @@ consommateur=$2
 
 id_centrales="${*:4}"
 
+#TODO verif existance
 chemin_sortie="test/"
 chemin_prog_c="codeC/"
 
@@ -27,9 +28,7 @@ init_fichier_sortie() {
 	echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
 
 
-	# if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
-	# 	echo test reussi
-	# fi
+
 }
 
 #clock :
@@ -43,7 +42,7 @@ tempsCompil=$(( $(date +%s) - tempsCompil ))
 tempsExe=$(( $(date +%s) - tempsExe ))
 tempsExe=$(( tempsExe - tempsCompil ))
 
-ecrire_fichier_sortie
+init_fichier_sortie
 
 echo $tempsExe
 
@@ -53,8 +52,12 @@ tempsExe=$(date +%s)
 tempsExe=$(( $(date +%s) - tempsExe ))
 
 
-
 #compilation des prog c
 #todo test sur existance du Makefile
-make -C "$chemin_prog_c"
-./"$chemin_prog_c""main"
+make -s -C "$chemin_prog_c"
+./"$chemin_prog_c""main" >> $fichier_sortie
+
+
+if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
+	echo "faut creer fichier jsp comment faire"
+fi
