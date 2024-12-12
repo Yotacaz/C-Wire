@@ -29,6 +29,10 @@ chemin="$1"
 station="$2"
 consommateur="$3"
 id_centrales="${*:4}"
+
+chemin_sortie="test/"  #TODO : Tests pour savoir si rep existe
+chemin_prog_c="codeC/"
+
 error=0
 if [ ! -f "$chemin" ]; then
   echo "ERREUR: Le fichier \"$chemin\" n'existe pas"
