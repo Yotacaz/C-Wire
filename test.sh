@@ -6,19 +6,25 @@ consommateur=$2
 ecrire_fichier_sortie() {
 	echo "Station $station : capacite : consomation ($consommateur) " > nom_temporaire.csv
 	echo ./main >> nom_temporaire.csv
-
+	#jsp comment main renvoie les valeurs
 }
 
 #clock :
-tempsDeb=$(time)
+tempsExe=$(date +%s)
+#fonction1
 
-tempsDebPause=$(time)
-tempsFinPause=$(time)
+tempsCompil=$(date +%s)
+#fontion
+tempsCompil=$(( $(date +%s) - tempsCompil ))
 
-tempsFin=$(time)
-
-duree=$(((tempsFin - tempsDeb) - (tempsFinPause + tempsDebPause)))
+tempsExe=$(( $(date +%s) - tempsExe ))
+tempsExe=$(( tempsExe - tempsCompil ))
 
 ecrire_fichier_sortie
 
-echo $duree
+echo $tempsExe
+
+
+tempsExe=$(date +%s)
+#fonction1
+tempsExe=$(( $(date +%s) - tempsExe ))
