@@ -3,10 +3,12 @@
 station=$1
 consommateur=$2
 
+id_centrales="${*:4}"
 
 chemin_sortie="test/"
+chemin_prog_c="codeC/"
 
-ecrire_fichier_sortie() {
+init_fichier_sortie() {
 	local nom_consommateur=""
 	case "$consommateur" in
 		all)
@@ -16,7 +18,14 @@ ecrire_fichier_sortie() {
 		indiv) 
 			nom_consommateur="individus" ;;
 	esac
-	echo "Station $station : capacite : consomation ($nom_consommateur) " > "$chemin_sortie""$station"_"$consommateur".csv
+	local sep_id_centrales=""
+	if [ -n "$id_centrales" ]; then
+		sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
+	fi
+	fichier_sortie="$chemin_sortie""$station"_"$consommateur""$sep_id_centrales".csv
+
+	echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
+
 
 	# if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	# 	echo test reussi
