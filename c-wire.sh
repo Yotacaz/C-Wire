@@ -28,7 +28,7 @@ fi
 chemin="$1"
 station="$2"
 consommateur="$3"
-filtre_centrales="${*:4}"
+id_centrales="${*:4}"
 error=0
 if [ ! -f "$chemin" ]; then
   echo "ERREUR: Le fichier \"$chemin\" n'existe pas"
@@ -74,9 +74,9 @@ case "$station" in
   lv) id_station=4 ;;
 esac
 
-filtre="^[^-]"
-if [ -n "$filtre_centrales" ]; then
-  filtre="^($(echo "$filtre_centrales" | tr ' ' '|'))+;"
+filtre_centrales=""
+if [ -n "$id_centrales" ]; then
+  filtre_centrales="^($(echo "$id_centrales" | tr ' ' '|'))+;"
 fi
 
-cat "$chemin" | tail -n+2 | cut -d ";" -f "$id_station,7,8" | grep -E "$filtre" | tr '-' '0'
+cat "$chemin" | tail -n+2 | grep -E "$filtre_centrales" | cut -d ";" -f "$id_station,7,8" | grep -v "^-" | tr '-' '0'
