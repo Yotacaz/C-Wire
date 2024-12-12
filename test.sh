@@ -52,12 +52,12 @@ tempsExe=$(date +%s)
 tempsExe=$(( $(date +%s) - tempsExe ))
 
 
-#compilation des prog c
+#compilation & exec des prog c
 #todo test sur existance du Makefile
 make -s -C "$chemin_prog_c"
-./"$chemin_prog_c""main" >> $fichier_sortie
+./"$chemin_prog_c""main" >> "$fichier_sortie"
 
 
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
-	echo "faut creer fichier jsp comment faire"
+	echo "faut creer fichier lv_all_minmax.csv jsp comment faire"
 fi
