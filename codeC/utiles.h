@@ -1,6 +1,4 @@
-#ifndef UTILES_H
-#define UTILES_H
-// #pragma once
+#pragma once
 
 #define RED "\x1B[0;31m"
 #define GRN "\x1B[0;32m"
@@ -39,5 +37,3 @@ int max3(int a, int b, int c);
 int min3(int a, int b, int c);
 
 void verifier(bool condition, char * msg_err);
-
-#endif
