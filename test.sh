@@ -3,10 +3,24 @@
 station=$1
 consommateur=$2
 
+
+chemin_sortie="test/"
+
 ecrire_fichier_sortie() {
-	echo "Station $station : capacite : consomation ($consommateur) " > nom_temporaire.csv
-	echo ./main >> nom_temporaire.csv
-	#jsp comment main renvoie les valeurs
+	local nom_consommateur=""
+	case "$consommateur" in
+		all)
+			nom_consommateur="tous" ;;
+		comp)
+			nom_consommateur="entreprises" ;;
+		indiv) 
+			nom_consommateur="individus" ;;
+	esac
+	echo "Station $station : capacite : consomation ($nom_consommateur) " > "$chemin_sortie""$station"_"$consommateur".csv
+
+	# if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
+	# 	echo test reussi
+	# fi
 }
 
 #clock :
