@@ -38,4 +38,6 @@ int max2(int a, int b);
 int max3(int a, int b, int c);
 int min3(int a, int b, int c);
 
+void verifier(bool condition, char * msg_err);
+
 #endif

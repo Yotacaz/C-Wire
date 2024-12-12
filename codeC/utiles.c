@@ -32,3 +32,12 @@ int min3(int a, int b, int c)
     }
     return min2(b, c);
 }
+
+//verifier si la condition est vrai, sinon arrete le programe avec un message d'erreur
+void verifier(bool condition, char * msg_err){
+    assert(msg_err);
+    if (!condition){
+        printf(BOLD_RED"%s"RESET, msg_err);
+        exit(EXIT_FAILURE);
+    }
+}
