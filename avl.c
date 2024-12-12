@@ -4,11 +4,12 @@
 #include <stdbool.h>
 #include <time.h>
 
+
 typedef struct _donneeStation             //raccourcie qui ralonge
 {
-    int ID_station;
-    int consomation;
-    int capacite;
+    unsigned int ID_station;
+    unsigned int conso;
+    unsigned int capacite;
 } Donnee_station;
 
 typedef struct struct_nd
@@ -89,13 +90,13 @@ void afficherAVL(pAVL nd, int niveau)
     // Affiche le noeud actuel avec indentation
     for (int i = 0; i < niveau; i++)
     {
-        printf("     "); // indentation
+        printf("     "); // indentationint main(){
     }
-    printf("ID=%d %d "
+    printf("ID=%d ca=%d co=%d "
            "\x1B[0;34m"
            "%d\n"
            "\x1B[0m",
-           nd->val.ID_station,nd->val.conso, nd->eq);
+           nd->val.ID_station,nd->val.capacite,nd->val.conso, nd->eq);
 
     // Affiche ensuite le sous-arbre gauche
     afficherAVL(nd->fg, niveau + 1);
@@ -426,11 +427,59 @@ pAVL randAVLTest(int min, int max, int size)
     return avl;
 }
 
+pAVL recherche(pAVL arbre,unsigned int elm){
+	if(arbre->val.ID_station == elm){
+		return arbre;
+	}
+	else if(arbre->val.ID_station > elm && existe_fg(arbre) == true){
+		recherche(arbre->fg,elm);
+	}
+	else if(arbre->val.ID_station < elm && existe_fd(arbre) == true){
+		recherche(arbre->fd,elm);
+	}
+    else if(arbre->val.ID_station > elm && existe_fg(arbre) == false){
+		return NULL;
+	}
+	else if(arbre->val.ID_station < elm && existe_fd(arbre) == false){
+		return NULL;
+	}
+}
+
+pAVL somme(pAVL avl){
+    Donnee_station donne;
+
+    while(scanf("%u;%u;%u", &donne.ID_station, &donne.capacite, &donne.conso) == 3){
+        printf("%u\n", donne.ID_station);
+        printf("%u\n", donne.capacite);
+        printf("%u\n\n", donne.conso);
+        if(avl==NULL){
+            avl= insertionAVL(avl,donne);
+        }
+        else if(donne.conso == 0){
+            if(recherche(avl,donne.ID_station) != NULL){
+                avl->val.capacite = avl->val.capacite + donne.capacite;
+            }
+            else{
+                avl = insertionAVL(avl,donne);
+            }
+        }
+        else if(donne.capacite == 0){
+            if(recherche(avl,donne.ID_station) != NULL){
+                avl->val.conso = avl->val.conso + donne.conso;
+            }
+            else{
+                avl = insertionAVL(avl,donne);
+            }
+        }
+    }
+    return avl;    
+}
+
 int main()
 {
     srand(time(NULL));
     pAVL avl = NULL;
-    avl = randAVLTest(5,90,8);
+    avl=somme(avl);
     afficherAVL(avl,0);
     return 0;
 }
