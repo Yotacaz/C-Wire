@@ -51,3 +51,10 @@ echo $tempsExe
 tempsExe=$(date +%s)
 #fonction1
 tempsExe=$(( $(date +%s) - tempsExe ))
+
+
+
+#compilation des prog c
+#todo test sur existance du Makefile
+make -C "$chemin_prog_c"
+./"$chemin_prog_c""main"

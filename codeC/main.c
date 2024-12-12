@@ -10,5 +10,6 @@
 int main()
 {
   test();
+  printf("je me suis fait executé !");
   return 0;
 }
