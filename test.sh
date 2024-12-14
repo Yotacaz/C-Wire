@@ -46,18 +46,22 @@ init_fichier_sortie
 
 echo $tempsExe
 
-
 tempsExe=$(date +%s)
 #fonction1
 tempsExe=$(( $(date +%s) - tempsExe ))
 
 
 #compilation & exec des prog c
-#todo test sur existance du Makefile
+#TODO test sur existance du Makefile
 make -s -C "$chemin_prog_c"
 ./"$chemin_prog_c""main" >> "$fichier_sortie"
 
+if [[ $? != 0 ]]; then
+	echo "Une erreur a été rencontrée (""$?"")"
+fi
 
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
-	echo "faut creer fichier lv_all_minmax.csv jsp comment faire"
+	echo Station lv :capacite:consomation(tous):consomation en trop" > lv_all_minmax.csv
+	echo "jsp comment on doit remplir le fichier"
+	#on calcule pr chaque ligne et on met le res dans le fichier ?
 fi
