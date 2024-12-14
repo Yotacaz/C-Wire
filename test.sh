@@ -56,12 +56,12 @@ tempsExe=$(( $(date +%s) - tempsExe ))
 make -s -C "$chemin_prog_c"
 ./"$chemin_prog_c""main" >> "$fichier_sortie"
 
-if [[ $? != 0 ]]; then
-	echo "Une erreur a été rencontrée (""$?"")"
+if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
+	echo "Une erreur a été rencontrée lors de l'execution du programme c"
 fi
 
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
-	echo Station lv :capacite:consomation(tous):consomation en trop" > lv_all_minmax.csv
+	echo "Station lv :capacite:consommation ""(tous)"":consomation en trop" > lv_all_minmax.csv
 	echo "jsp comment on doit remplir le fichier"
 	#on calcule pr chaque ligne et on met le res dans le fichier ?
 fi
