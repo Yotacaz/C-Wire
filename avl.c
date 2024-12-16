@@ -427,6 +427,18 @@ pAVL randAVLTest(int min, int max, int size)
     return avl;
 }
 
+int recherche(pAVL arbre,Donnee_station elm){
+	if(arbre->val.ID_station == elm.ID_station){
+		return 1;
+	}
+	else if(arbre->val.ID_station > elm.ID_station && existe_fg(arbre) == true){
+		recherche(arbre->fg,elm);
+	}
+	else if(arbre->val.ID_station < elm.ID_station && existe_fd(arbre) == true){
+		recherche(arbre->fd,elm);
+	}
+}
+
 pAVL somme(pAVL avl,Donnee_station donne){
     // printf("PA    %u", donne.ID_station);
     // printf("  %u  ", donne.capacite);
@@ -440,17 +452,16 @@ pAVL somme(pAVL avl,Donnee_station donne){
         avl->val.capacite =avl->val.capacite + donne.capacite;
         // printf("%u  %u  %u\n", avl->val.ID_station,avl->val.capacite,avl->val.conso);
     }
-    else if(avl->val.ID_station > donne.ID_station && existe_fg(avl) == true){
-        somme(avl->fg,donne);
+    else if(recherche(avl,donne) == 1){
+        if(avl->val.ID_station > donne.ID_station && existe_fg(avl) == true){
+            somme(avl->fg,donne);
+        }
+        else if(avl->val.ID_station < donne.ID_station && existe_fd(avl) == true){
+            somme(avl->fd,donne);
+        }
     }
-    else if(avl->val.ID_station < donne.ID_station && existe_fd(avl) == true){
-        somme(avl->fd,donne);
-    }
-    else if(avl->val.ID_station > donne.ID_station && existe_fg(avl) == false){
-        avl = insertionAVL(avl,donne);
-    }
-    else if(avl->val.ID_station < donne.ID_station && existe_fd(avl) == false){
-    	avl = insertionAVL(avl,donne);
+    else if(recherche(avl,donne) != 1){
+    	avl=insertionAVL(avl,donne);
     }
     return avl;    
 }
