@@ -61,15 +61,16 @@ if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
 fi
 
 
-if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
-	echo "Station lv :capacite:consommation ""(tous)"":consomation en trop" > lv_all_minmax.csv
-	#on calcule pr chaque ligne et on met le res dans le fichier ?
-fi
 fichier_minmax="lv_all_minmax.csv"
-
-while IFS=':' read -r n_station capa conso; do
-	
-	conso_en_trop=$((conso - capa))
-	echo "$n_station:$capa:$conso:$conso_en_trop"
-done < "$fichier_sortie" > "$fichier_minmax"
-
+{
+	read -r tete
+	echo "$tete:consomation en trop" > fichier_minmax
+	while IFS=':' read -r n_station capa conso; do
+		if [[ "$conso" =~ ^[0-9]+$ && "$capa" =~ ^[0-9]+$ ]]; then
+			conso_en_trop=$((conso - capa))
+		else
+			conso_en_trop="NA"
+		fi
+		echo "$n_station:$capa:$conso:$conso_en_trop"
+	done >> "$fichier_minmax"
+} < "$fichier_sortie"
