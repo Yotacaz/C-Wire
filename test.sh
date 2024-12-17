@@ -6,8 +6,9 @@ consommateur=$2
 id_centrales="${*:4}"
 
 #TODO verif existance
-chemin_sortie="test/"
+chemin_resultat="test/"
 chemin_prog_c="codeC/"
+chemin_fichier_temp="tmp/"
 
 init_fichier_sortie() {
 	local nom_consommateur=""
@@ -23,11 +24,9 @@ init_fichier_sortie() {
 	if [ -n "$id_centrales" ]; then
 		sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
 	fi
-	fichier_sortie="$chemin_sortie""$station"_"$consommateur""$sep_id_centrales".csv
+	fichier_sortie="$chemin_resultat""$station"_"$consommateur""$sep_id_centrales".csv
 
 	echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
-
-
 
 }
 
@@ -61,8 +60,8 @@ if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
 fi
 
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
-	fichier_minmax="lv_all_minmax.csv"
-	fichier_temp1=$(mktemp)
+	fichier_minmax="$chemin_resultat""lv_all_minmax.csv"
+	fichier_temp1="$chemin_fichier_temp""tmp1"
 	{
 		read -r tete
 		echo "$tete:consomation en trop" > "$fichier_minmax"
@@ -76,7 +75,7 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_temp1"
 		done
 	} < "$fichier_sortie"
-	fichier_temp2=$(mktemp)
+	fichier_temp2="$chemin_fichier_temp""tmp2"
 	sort -r -n --key=4 --field-separator=':' "$fichier_temp1" > "$fichier_temp2"
 	
 	n_ligne=$(wc -l "$fichier_temp1" | cut -d ' ' -f1)
