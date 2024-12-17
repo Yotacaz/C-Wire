@@ -79,8 +79,13 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	} < "$fichier_sortie"
 	sort -n --key=4 --field-separator=: "$fichier_temp"
 	trie=$?
-	head -n 10 "$trie" >> "$fichier_minmax"
-	tail -n 10 "$trie" >> "$fichier_minmax"
+	n_ligne=$(wc -l "$fichier_temp")
+	if [ "$n_ligne" -lt 21  ]; then
+		cat "$fichier_temp" >> "$fichier_minmax"
+	else	
+		head -n 10 "$trie" >> "$fichier_minmax"
+		tail -n 10 "$trie" >> "$fichier_minmax"
+	fi
 fi
 
 # Station lv:capacite:consomation(tous):consomation en trop
