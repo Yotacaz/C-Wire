@@ -60,8 +60,16 @@ if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
 	echo "Une erreur a été rencontrée lors de l'execution du programme c"
 fi
 
+
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	echo "Station lv :capacite:consommation ""(tous)"":consomation en trop" > lv_all_minmax.csv
-	echo "jsp comment on doit remplir le fichier"
 	#on calcule pr chaque ligne et on met le res dans le fichier ?
 fi
+fichier_minmax="lv_all_minmax.csv"
+
+while IFS=':' read -r n_station capa conso; do
+	
+	conso_en_trop=$((conso - capa))
+	echo "$n_station:$capa:$conso:$conso_en_trop"
+done < "$fichier_sortie" > "$fichier_minmax"
+
