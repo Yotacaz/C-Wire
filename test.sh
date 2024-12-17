@@ -63,16 +63,24 @@ fi
 
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	fichier_minmax="lv_all_minmax.csv"
+	fichier_temp=$(mktemp)
 	{
 		read -r tete
 		echo "$tete:consomation en trop" > "$fichier_minmax"
 		while IFS=':' read -r n_station capa conso; do
+			#on s'assure que capa et conso sont des nombres
 			if [[ "$conso" =~ ^[0-9]+$ && "$capa" =~ ^[0-9]+$ ]]; then
 				conso_en_trop=$((conso - capa))
 			else
 				conso_en_trop="NA"
 			fi
-			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_minmax"
+			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_temp"
 		done
 	} < "$fichier_sortie"
+	sort -n --key=4 --field-separator=: "$fichier_temp"
+	trie=$?
+	head -n 10 "$trie" >> "$fichier_minmax"
+	tail -n 10 "$trie" >> "$fichier_minmax"
 fi
+
+# Station lv:capacite:consomation(tous):consomation en trop
