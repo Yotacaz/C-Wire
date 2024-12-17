@@ -61,16 +61,18 @@ if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
 fi
 
 
-fichier_minmax="lv_all_minmax.csv"
-{
-	read -r tete
-	echo "$tete:consomation en trop" > fichier_minmax
-	while IFS=':' read -r n_station capa conso; do
-		if [[ "$conso" =~ ^[0-9]+$ && "$capa" =~ ^[0-9]+$ ]]; then
-			conso_en_trop=$((conso - capa))
-		else
-			conso_en_trop="NA"
-		fi
-		echo "$n_station:$capa:$conso:$conso_en_trop"
-	done >> "$fichier_minmax"
-} < "$fichier_sortie"
+if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
+	fichier_minmax="lv_all_minmax.csv"
+	{
+		read -r tete
+		echo "$tete:consomation en trop" > "$fichier_minmax"
+		while IFS=':' read -r n_station capa conso; do
+			if [[ "$conso" =~ ^[0-9]+$ && "$capa" =~ ^[0-9]+$ ]]; then
+				conso_en_trop=$((conso - capa))
+			else
+				conso_en_trop="NA"
+			fi
+			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_minmax"
+		done
+	} < "$fichier_sortie"
+fi
