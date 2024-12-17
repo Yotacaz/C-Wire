@@ -53,17 +53,16 @@ tempsExe=$(( $(date +%s) - tempsExe ))
 
 #compilation & exec des prog c
 #TODO test sur existance du Makefile
+make -s -C "$chemin_prog_c" clean
 make -s -C "$chemin_prog_c"
-./"$chemin_prog_c""main" >> "$fichier_sortie"
 
 if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
 	echo "Une erreur a été rencontrée lors de l'execution du programme c"
 fi
 
-
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	fichier_minmax="lv_all_minmax.csv"
-	fichier_temp=$(mktemp)
+	fichier_temp1=$(mktemp)
 	{
 		read -r tete
 		echo "$tete:consomation en trop" > "$fichier_minmax"
@@ -74,18 +73,22 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 			else
 				conso_en_trop="NA"
 			fi
-			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_temp"
+			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_temp1"
 		done
 	} < "$fichier_sortie"
-	sort -n --key=4 --field-separator=: "$fichier_temp"
-	trie=$?
-	n_ligne=$(wc -l "$fichier_temp")
+	fichier_temp2=$(mktemp)
+	sort -r -n --key=4 --field-separator=':' "$fichier_temp1" > "$fichier_temp2"
+	
+	n_ligne=$(wc -l "$fichier_temp1" | cut -d ' ' -f1)
+	
 	if [ "$n_ligne" -lt 21  ]; then
-		cat "$fichier_temp" >> "$fichier_minmax"
+		cat "$fichier_temp2" >> "$fichier_minmax"
 	else	
-		head -n 10 "$trie" >> "$fichier_minmax"
-		tail -n 10 "$trie" >> "$fichier_minmax"
+		head -n 10 "$fichier_temp2" >> "$fichier_minmax"
+		tail -n 10 "$fichier_temp2" >> "$fichier_minmax"
 	fi
+	rm "$fichier_temp1"
+	rm "$fichier_temp2"
 fi
 
 # Station lv:capacite:consomation(tous):consomation en trop
