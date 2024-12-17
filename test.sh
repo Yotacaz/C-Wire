@@ -10,6 +10,7 @@ chemin_resultat="test/"
 chemin_prog_c="codeC/"
 chemin_fichier_temp="tmp/"
 
+#initialise nom du fichier de sortie et creer l'en-tête
 init_fichier_sortie() {
 	local nom_consommateur=""
 	case "$consommateur" in
@@ -43,7 +44,7 @@ tempsExe=$(( tempsExe - tempsCompil ))
 
 init_fichier_sortie
 
-echo $tempsExe
+echo "Temps d'execution du programme : ""$tempsExe""s"
 
 tempsExe=$(date +%s)
 #fonction1
@@ -59,10 +60,12 @@ if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
 	echo "Une erreur a été rencontrée lors de l'execution du programme c"
 fi
 
+#cas où on doit creer le fichier lv_all_minmax
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	fichier_minmax="$chemin_resultat""lv_all_minmax.csv"
 	fichier_temp1="$chemin_fichier_temp""tmp1"
 	{
+		#format de l'en tête : Station lv:capacite:consomation(tous):consomation en trop
 		read -r tete
 		echo "$tete:consomation en trop" > "$fichier_minmax"
 		while IFS=':' read -r n_station capa conso; do
@@ -75,6 +78,8 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_temp1"
 		done
 	} < "$fichier_sortie"
+	
+	#tris à ajout sur le fichier minmax
 	fichier_temp2="$chemin_fichier_temp""tmp2"
 	sort -r -n --key=4 --field-separator=':' "$fichier_temp1" > "$fichier_temp2"
 	
@@ -89,5 +94,3 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	rm "$fichier_temp1"
 	rm "$fichier_temp2"
 fi
-
-# Station lv:capacite:consomation(tous):consomation en trop
