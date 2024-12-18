@@ -453,5 +453,6 @@ int main()
     pAVL avl = NULL;
     avl=transfert_donné_ds_AVL(avl);
     afficherAVL(avl,0);
+	freeAVL(avl);
     return 0;
 }
