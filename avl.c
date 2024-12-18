@@ -23,6 +23,33 @@ typedef struct struct_nd
 typedef Noeud *pAVL;
 
 //FONCTIONS 
+int min2(int a, int b)
+{
+    return a < b ? a : b;
+}
+
+int max2(int a, int b)
+{
+    return a < b ? b : a;
+}
+
+int max3(int a, int b, int c)
+{
+    if (a < b)
+    {
+        return max2(b, c);
+    }
+    return max2(a, c);
+}
+
+int min3(int a, int b, int c)
+{
+    if (a < b)
+    {
+        return min2(a, c);
+    }
+    return min2(b, c);
+}
 
 pAVL creerAVL(Donnee_station val)
 {
@@ -440,11 +467,27 @@ pAVL somme(pAVL avl,Donnee_station donne,bool existe){
 pAVL transfert_donné_ds_AVL(pAVL avl){
     Donnee_station donnee;
     bool existence = false;
+    
     while(scanf("%u;%u;%u", &donnee.ID_station, &donnee.capacite, &donnee.conso) == 3){
         existence = recherche(avl,donnee);
         avl=somme(avl,donnee,existence);
-    }
-return avl;
+    } //fonctionne
+    
+    // int nb_scanné = 1;
+    // do{
+    //     nb_scanné = scanf("%u;%u;%u", &donnee.ID_station, &donnee.capacite, &donnee.conso);
+    //     printf("\n\n %d \n \n",nb_scanné);
+    //     if(nb_scanné == 3){
+    //         existence = recherche(avl,donnee);
+    //         avl=somme(avl,donnee,existence);
+    //     }
+    //     else if(nb_scanné == 0) {
+    //         return avl;
+    //     }
+    //     // else {
+    //     //     exit(EXIT_FAILURE);
+    //     // }
+    // }while(nb_scanné == 3);                                     fonctionne pas
 }
 
 int main()
@@ -452,7 +495,7 @@ int main()
     srand(time(NULL));
     pAVL avl = NULL;
     avl=transfert_donné_ds_AVL(avl);
-    afficherAVL(avl,0);
-	freeAVL(avl);
+    // afficherAVL(avl,0);
+    // freeAVL(avl);
     return 0;
 }
