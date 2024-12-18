@@ -11,11 +11,11 @@ Pour commencer, ouvrez ce repertoire sur une console, puis executez le fichier s
 
 En cas d'utilisation en `lv all`, un fichier supplémentaire sera généré, avec les 10 postes lv consommant le plus d'énergie comparé à leur capacité, et les 10 postes lv consommant le moins d'énergie par rapport à leur capacité.
 
-Exemples d'utilisation : **à faire**
+Exemples d'utilisation : bash c-wire.sh 
 
 Notes:
 Le fichier de données d’entrée est situé dans le dossier *‘input’*
 Le programme C et tous les fichiers qui s’y rapportent (makefile,exécutable, …) sont situés dans le dossier *‘codeC’*
 Les graphiques, sont stockés dans des images sur le disque dur dans un dossier *‘graphs’*
-Aucun fichiers temporaire n'est généré par le programe.
+Les fichiers temporaire générés par le programe sont crées *'dans'* tmp avant d'être supprimés.
 Les résultats d’exécutions précédentes sont dans le dossier *‘tests’*.

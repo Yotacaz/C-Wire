@@ -81,6 +81,7 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	
 	#tris à ajout sur le fichier minmax
 	fichier_temp2="$chemin_fichier_temp""tmp2"
+	#tris croissant en fonction de la 4eme colonne (conso en trop), séparées par des ':' 
 	sort -r -n --key=4 --field-separator=':' "$fichier_temp1" > "$fichier_temp2"
 	
 	n_ligne=$(wc -l "$fichier_temp1" | cut -d ' ' -f1)
@@ -91,6 +92,7 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 		head -n 10 "$fichier_temp2" >> "$fichier_minmax"
 		tail -n 10 "$fichier_temp2" >> "$fichier_minmax"
 	fi
+	#nettoyage
 	rm "$fichier_temp1"
 	rm "$fichier_temp2"
 fi
