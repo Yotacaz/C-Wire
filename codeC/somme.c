@@ -24,25 +24,25 @@ pAVL somme(pAVL avl,Donnee_station donne,bool existe)
 }
 
 //récupére les donnés du shel et vérifier qu'elle soit entière puis les sommes avec la fonction ci-dessus.
-pAVL transfert_donné_ds_AVL(pAVL avl)
+pAVL transfert_donne_ds_AVL(pAVL avl)
 {
     Donnee_station donnee;
     bool existence = false;
-    short nb_scanné = 1;
+    short nb_scanne = 1;
     do{
-        nb_scanné = scanf("%lu;%lu;%lu", &donnee.ID_station, &donnee.capacite, &donnee.conso);
-        // printf("\n\n %d \n \n",nb_scanné);
-        if(nb_scanné == 3){
+        nb_scanne = scanf("%lu;%lu;%lu", &donnee.ID_station, &donnee.capacite, &donnee.conso);
+        // printf("\n\n %d \n \n",nb_scanne);
+        if(nb_scanne == 3){
             existence = recherche(avl,donnee);
             avl=somme(avl,donnee,existence);
         }
-        else if(nb_scanné == -1) {
+        else if(nb_scanne == -1) {
             return avl;
         }
         else {
             exit(EXIT_FAILURE);
         }
-    }while(nb_scanné == 3);
+    }while(nb_scanne == 3);
 }
 
 //recherche si la station existe déja dans l'AVL

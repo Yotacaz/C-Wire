@@ -24,7 +24,7 @@ int main()
 
     srand(time(NULL));
     pAVL avl = NULL;
-    avl=transfert_donné_ds_AVL(avl);
+    avl=transfert_donne_ds_AVL(avl);
     afficherAVL(avl,0);
     printf("\n\n\n");
     affichageinfixe(avl);

@@ -74,7 +74,7 @@ if [ ! -d $CHEMIN_PROG_C ];then
   exit 1
 fi
 
-if [ ! -d $CHEMIN_PROG_C$NOM_MAKEFILE ];then
+if [ ! -f $CHEMIN_PROG_C$NOM_MAKEFILE ];then
 	echo "ERREUR: Le fichier $CHEMIN_PROG_C$NOM_MAKEFILE n'existe pas"
   exit 1
 fi
@@ -131,22 +131,6 @@ case "$station" in
   lv) ;;
 esac
 
-cat "$chemin" \
-| tail -n+2 \
-| grep -E "$filtre" \
-| cut -d ";" -f "$id_station,7,8" \
-| grep -v "^-" \
-| tr '-' '0' \
-| ./"$CHEMIN_PROG_C""main" \
-| sort -n --key=2 --field-separator=':' >> "$fichier_sortie"
-#tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':' 
-
-if ! in_array 1 "${PIPESTATUS[@]}"; then
-	echo "Une erreur a été rencontrée lors de l'execution du programme c"
-	exit 1
-fi
-#SORTIE DU FICHIER C
-
 #génération du nom du fichier de sortie
 nom_consommateur=""
 case "$consommateur" in
@@ -165,6 +149,23 @@ fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".c
 
 #génération de l'en tête du fichier csv
 echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
+
+cat "$chemin" \
+| tail -n+2 \
+| grep -E "$filtre" \
+| cut -d ";" -f "$id_station,7,8" \
+| grep -v "^-" \
+| tr '-' '0' \
+| ./"$CHEMIN_PROG_C""main" \
+| sort -n --key=2 --field-separator=':' \
+>> "$fichier_sortie"
+#tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':' 
+
+if in_array 1 "${PIPESTATUS[@]}"; then
+	echo "Une erreur a été rencontrée lors de l'execution du programme c"
+	exit 1
+fi
+#SORTIE DU FICHIER C
 
 
 

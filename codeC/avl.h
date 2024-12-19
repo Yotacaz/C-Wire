@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include "station.h"
+
 typedef struct struct_nd
 {
     int eq;                            //equilibre
