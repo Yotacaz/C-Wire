@@ -118,3 +118,25 @@ if [ -n "$id_centrales" ]; then
 fi
 
 cat "$chemin" | tail -n+2 | grep -E "$filtre_centrales" | cut -d ";" -f "$id_station,7,8" | grep -v "^-" | tr '-' '0'
+
+
+#SORTIE DU FICHIER C
+
+#génération du nom du fichier de sortie
+nom_consommateur=""
+case "$consommateur" in
+  all)
+    nom_consommateur="tous" ;;
+  comp)
+    nom_consommateur="entreprises" ;;
+  indiv) 
+    nom_consommateur="individus" ;;
+esac
+sep_id_centrales=""
+if [ -n "$id_centrales" ]; then
+  sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
+fi
+fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".csv
+
+#génération de l'en tête du document
+echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
