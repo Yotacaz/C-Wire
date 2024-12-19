@@ -1,5 +1,14 @@
 #!/bin/bash
 
+#constantes
+CHEMIN_RESULTAT="test/"
+CHEMIN_PROG_C="codeC/"
+CHEMIN_FICHIER_TEMP="tmp/"
+CHEMIN_GRAPH="graphs/"
+CHEMIN_INPUT="input/"
+
+NOM_EXECUTABLE="main"
+
 aide() {
   echo "Utilisation: $0 <chemin> <station> <consommateur> [<centrales>]"
 }
@@ -13,6 +22,8 @@ in_array() {
   done
   return 1
 }
+
+
 
 if in_array "-h" "$@"; then
   aide
