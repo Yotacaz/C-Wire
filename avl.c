@@ -76,6 +76,10 @@ bool existe_fg(Noeud *nd)
     return nd->fg != NULL;
 }
 
+void traiter_station(Donnee_station station){
+    printf("%lu:%lu:%lu\n",station.ID_station, station.capacite, station.conso);
+}
+
 // Affichage de l'arbre en mode horizontal
 void afficherAVL(pAVL nd, int niveau)
 {
@@ -100,6 +104,15 @@ void afficherAVL(pAVL nd, int niveau)
 
     // Affiche ensuite le sous-arbre gauche
     afficherAVL(nd->fg, niveau + 1);
+}
+void affichageinfixe(pAVL noeuds){
+	if(existe_fg(noeuds) == true){
+		affichageinfixe(noeuds->fg);
+	}
+	traiter_station(noeuds->val);
+	if(existe_fd(noeuds) == true){
+		affichageinfixe(noeuds->fd);
+	}
 }
 
 // attention ne pas utiliser si assert desactive
@@ -490,6 +503,8 @@ int main()
     pAVL avl = NULL;
     avl=transfert_donné_ds_AVL(avl);
     afficherAVL(avl,0);
+    printf("\n\n\n");
+    affichageinfixe(avl);
     freeAVL(avl);
     return 0;
 }
