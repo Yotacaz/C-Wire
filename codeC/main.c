@@ -4,7 +4,9 @@
 #include <stdbool.h>
 #include <time.h>
 
-// #include "avl.h"
+#include "avl.h"
+#include "somme.h"
+#include "avlUtile.h"
 
 int main()
 {
