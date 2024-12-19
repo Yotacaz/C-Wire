@@ -148,6 +148,9 @@ fi
 fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".csv
 
 #génération de l'en tête du fichier csv
+
+temps_dep=$(date +%s)
+
 echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
 
 cat "$chemin" \
@@ -167,11 +170,13 @@ if in_array 1 "${PIPESTATUS[@]}"; then
 fi
 #SORTIE DU FICHIER C
 
-
+temps_minmax=$(date +%s)
 
 
 #cas où on doit creer le fichier lv_all_minmax
-if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
+est_lv_all(){ [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; }
+
+if est_lv_all; then
 	fichier_minmax="$CHEMIN_RESULTAT""lv_all_minmax.csv"
   min_max=""
 	{
@@ -203,4 +208,13 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 		head -n 10 "$min_max" >> "$fichier_minmax"
 		tail -n 10 "$min_max" >> "$fichier_minmax"
 	fi
+fi
+
+temps_tot=$(date +%s)
+
+echo "temps d'execution total : $(("$temps_tot" - "$temps_dep"))"
+
+if est_lv_all; then
+  echo "temps de creation du fichier $fichier_sortie : $(("$temps_minmax" - "$temps_dep"))"
+  echo "temps de creation du fichier $fichier_minmax : $(("$temps_tot" - "$temps_minmax"))"
 fi
