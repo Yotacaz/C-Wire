@@ -470,7 +470,7 @@ pAVL transfert_donné_ds_AVL(pAVL avl){
     short nb_scanné = 1;
     do{
         nb_scanné = scanf("%lu;%lu;%lu", &donnee.ID_station, &donnee.capacite, &donnee.conso);
-        printf("\n\n %d \n \n",nb_scanné);
+        // printf("\n\n %d \n \n",nb_scanné);
         if(nb_scanné == 3){
             existence = recherche(avl,donnee);
             avl=somme(avl,donnee,existence);
