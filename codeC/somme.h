@@ -1,8 +1,8 @@
 #pragma once
 #include <stdio.h>
 #include <stdbool.h>
-
 #include "station.h"
+#include "avl.h"
 
 pAVL somme(pAVL avl,Donnee_station donne,bool existe);
 pAVL transfert_donne_ds_AVL(pAVL avl);
