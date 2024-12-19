@@ -33,6 +33,7 @@ mkdir -p $CHEMIN_GRAPH
 mkdir -p $CHEMIN_INPUT
 
 # TODO En cours
+#compilation
 if [ ! -f $CHEMIN_PROG_C$NOM_EXECUTABLE ]; then
 	if ! make -s -C "$CHEMIN_PROG_C" ; then
 		echo "ERREUR lors de la compilation de l'executable"

@@ -84,6 +84,14 @@ mkdir -p $CHEMIN_RESULTAT
 mkdir -p $CHEMIN_GRAPH
 mkdir -p $CHEMIN_INPUT
 
+#compilation
+if [ ! -f $CHEMIN_PROG_C$NOM_EXECUTABLE ]; then
+	if ! make -s -C "$CHEMIN_PROG_C" ; then
+		echo "ERREUR lors de la compilation de l'executable"
+		exit 1
+	fi
+fi
+
 
 # Format des données en entrée :
 # |  1  |  2  |  3  |  4  |  5  |  6  |  7  |   8   |
