@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <assert.h>
-
 #include "utiles.h"
 
 int min2(int a, int b)
