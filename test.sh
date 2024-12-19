@@ -85,9 +85,9 @@ tempsExe=$(( $(date +%s) - tempsExe ))
 
 
 #compilation & exec des prog c
-#TODO test sur existance du Makefile
-make -s -C "$CHEMIN_PROG_C" clean
-make -s -C "$CHEMIN_PROG_C"
+# #TODO test sur existance du Makefile
+# make -s -C "$CHEMIN_PROG_C" clean
+# make -s -C "$CHEMIN_PROG_C"
 
 #tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':' 
 if ! ./"$CHEMIN_PROG_C""main" | sort -n --key=2 --field-separator=':' >> "$fichier_sortie"; then
