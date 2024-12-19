@@ -8,4 +8,4 @@ typedef struct _donneeStation             //raccourcie qui ralonge
     unsigned long capacite;
 } Donnee_station;
 
-void traiterStation (Donnee_station station);
+void traiter_station (Donnee_station station);
