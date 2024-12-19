@@ -24,19 +24,13 @@ fi
 if [ ! -d $CHEMIN_FICHIER_TEMP ];then
 	mkdir $CHEMIN_FICHIER_TEMP
 else
-	echo "$CHEMIN_FICHIER_TEMP""*"
 	rm -rf ${CHEMIN_FICHIER_TEMP:?}/*	#nettoyage du fichier temp
 fi
 
-if [ ! -d $CHEMIN_RESULTAT ];then
-	mkdir $CHEMIN_RESULTAT
-fi
-if [ ! -d $CHEMIN_GRAPH ];then
-	mkdir $CHEMIN_GRAPH
-fi
-if [ ! -d $CHEMIN_INPUT ];then
-	mkdir $CHEMIN_INPUT
-fi
+#creation s'ils n'existent pas des dossiers nécéssaires
+mkdir -p $CHEMIN_RESULTAT
+mkdir -p $CHEMIN_GRAPH
+mkdir -p $CHEMIN_INPUT
 
 # TODO En cours
 if [ ! -f $CHEMIN_PROG_C$NOM_EXECUTABLE ]; then
