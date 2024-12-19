@@ -204,8 +204,8 @@ if est_lv_all; then
 	
 	#tris à ajout sur le fichier minmax
 	#tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':' 
-	min_max=$(sort -r -n --key=4 --field-separator=':' <<< "$min_max")
   
+	min_max=$(sort -r -n --key=4 --field-separator=':' <<< "${min_max::-1}")
 	n_ligne=$(wc -l <<< "$min_max")
 	
 	#copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
