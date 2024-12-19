@@ -8,6 +8,7 @@ CHEMIN_GRAPH="graphs/"
 CHEMIN_INPUT="input/"
 
 NOM_EXECUTABLE="main"
+NOM_MAKEFILE="Makefile"
 
 aide() {
   echo "Utilisation: $0 <chemin> <station> <consommateur> [<centrales>]"
@@ -69,8 +70,13 @@ fi
 
 #verif existance
 if [ ! -d $CHEMIN_PROG_C ];then
-	error=1
 	echo "ERREUR: Le dossier $CHEMIN_PROG_C n'existe pas"
+  exit 1
+fi
+
+if [ ! -d $CHEMIN_PROG_C$NOM_MAKEFILE ];then
+	echo "ERREUR: Le fichier $CHEMIN_PROG_C$NOM_MAKEFILE n'existe pas"
+  exit 1
 fi
 
 if [ ! -d $CHEMIN_FICHIER_TEMP ];then
@@ -178,7 +184,7 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	#copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
 	if [ "$n_ligne" -lt 21  ]; then
 		cat "$fichier_temp2" >> "$fichier_minmax"
-	else	
+	else
 		head -n 10 "$fichier_temp2" >> "$fichier_minmax"
 		tail -n 10 "$fichier_temp2" >> "$fichier_minmax"
 	fi
