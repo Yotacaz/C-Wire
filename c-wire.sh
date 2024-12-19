@@ -41,9 +41,6 @@ station="$2"
 consommateur="$3"
 id_centrales="${*:4}"
 
-chemin_sortie="test/"  #TODO : Tests pour savoir si rep existe
-chemin_prog_c="codeC/"
-
 error=0
 if [ ! -f "$chemin" ]; then
   echo "ERREUR: Le fichier \"$chemin\" n'existe pas"
@@ -69,6 +66,24 @@ if [ $error -eq 1 ]; then
   aide
   exit 1
 fi
+
+#verif existance
+if [ ! -d $CHEMIN_PROG_C ];then
+	error=1
+	echo "ERREUR: Le dossier $CHEMIN_PROG_C n'existe pas"
+fi
+
+if [ ! -d $CHEMIN_FICHIER_TEMP ];then
+	mkdir $CHEMIN_FICHIER_TEMP
+else
+	rm -rf ${CHEMIN_FICHIER_TEMP:?}/*	#nettoyage du fichier temp
+fi
+
+#creation s'ils n'existent pas des dossiers nécéssaires
+mkdir -p $CHEMIN_RESULTAT
+mkdir -p $CHEMIN_GRAPH
+mkdir -p $CHEMIN_INPUT
+
 
 # Format des données en entrée :
 # |  1  |  2  |  3  |  4  |  5  |  6  |  7  |   8   |

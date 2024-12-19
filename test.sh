@@ -16,7 +16,7 @@ CHEMIN_INPUT="input/"
 NOM_EXECUTABLE="main"
 
 error=0
-#TODO verif existance
+#verif existance
 if [ ! -d $CHEMIN_PROG_C ];then
 	error=1
 	echo "ERREUR: Le dossier $CHEMIN_PROG_C n'existe pas"
