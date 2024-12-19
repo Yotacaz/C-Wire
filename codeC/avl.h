@@ -7,8 +7,6 @@
 #include "station.h"
 #include "utiles.h"
 
-#include "station.h"
-
 typedef struct struct_nd
 {
     int eq;                            //equilibre
