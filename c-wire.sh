@@ -173,7 +173,6 @@ fi
 #cas où on doit creer le fichier lv_all_minmax
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	fichier_minmax="$CHEMIN_RESULTAT""lv_all_minmax.csv"
-	fichier_temp1="$CHEMIN_FICHIER_TEMP""tmp1"
   min_max=""
 	{
 		#format de l'en tête : Station lv:capacite:consomation(tous):consomation en trop
@@ -192,20 +191,16 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	} < "$fichier_sortie"
 	
 	#tris à ajout sur le fichier minmax
-	fichier_temp2="$CHEMIN_FICHIER_TEMP""tmp2"
 	#tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':' 
-	sort -r -n --key=4 --field-separator=':' "$fichier_temp1" > "$fichier_temp2"
+	min_max=$(sort -r -n --key=4 --field-separator=':' <<< "$min_max")
 	
-	n_ligne=$(wc -l "$fichier_temp1" | cut -d ' ' -f1)
+	n_ligne=$(wc -l <<< "$min_max")
 	
 	#copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
 	if [ "$n_ligne" -lt 21  ]; then
-		cat "$fichier_temp2" >> "$fichier_minmax"
+		cat "$min_max" >> "$fichier_minmax"
 	else
-		head -n 10 "$fichier_temp2" >> "$fichier_minmax"
-		tail -n 10 "$fichier_temp2" >> "$fichier_minmax"
+		head -n 10 "$min_max" >> "$fichier_minmax"
+		tail -n 10 "$min_max" >> "$fichier_minmax"
 	fi
-	#nettoyage
-	rm "$fichier_temp1"
-	rm "$fichier_temp2"
 fi
