@@ -15,11 +15,11 @@ CHEMIN_INPUT="input/"
 
 NOM_EXECUTABLE="main"
 
-error=0
+
 #verif existance
 if [ ! -d $CHEMIN_PROG_C ];then
-	error=1
 	echo "ERREUR: Le dossier $CHEMIN_PROG_C n'existe pas"
+	exit 1
 fi
 if [ ! -d $CHEMIN_FICHIER_TEMP ];then
 	mkdir $CHEMIN_FICHIER_TEMP
