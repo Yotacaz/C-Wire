@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <time.h>
+#include "station.h"
+#include "utiles.h"
 
 typedef struct struct_nd
 {
