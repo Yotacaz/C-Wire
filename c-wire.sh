@@ -131,9 +131,20 @@ case "$station" in
   lv) ;;
 esac
 
-cat "$chemin" | tail -n+2 | grep -E "$filtre" | cut -d ";" -f "$id_station,7,8" | grep -v "^-" | tr '-' '0'
+cat "$chemin" \
+| tail -n+2 \
+| grep -E "$filtre" \
+| cut -d ";" -f "$id_station,7,8" \
+| grep -v "^-" \
+| tr '-' '0' \
+| ./"$CHEMIN_PROG_C""main" \
+| sort -n --key=2 --field-separator=':' >> "$fichier_sortie"
+#tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':' 
 
-
+if ! in_array 1 "${PIPESTATUS[@]}"; then
+	echo "Une erreur a été rencontrée lors de l'execution du programme c"
+	exit 1
+fi
 #SORTIE DU FICHIER C
 
 #génération du nom du fichier de sortie
@@ -156,11 +167,6 @@ fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".c
 echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
 
 
-#tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':' 
-if ! ./"$CHEMIN_PROG_C""main" | sort -n --key=2 --field-separator=':' >> "$fichier_sortie"; then
-	echo "Une erreur a été rencontrée lors de l'execution du programme c"
-	exit 1
-fi
 
 
 #cas où on doit creer le fichier lv_all_minmax
