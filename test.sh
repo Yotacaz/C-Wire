@@ -60,8 +60,9 @@ tempsExe=$(( $(date +%s) - tempsExe ))
 make -s -C "$chemin_prog_c" clean
 make -s -C "$chemin_prog_c"
 
-if ! ./"$chemin_prog_c""main" >> "$fichier_sortie"; then
+if ! ./"$chemin_prog_c""main" | sort -n --key=2 --field-separator=':' >> "$fichier_sortie"; then
 	echo "Une erreur a été rencontrée lors de l'execution du programme c"
+	exit 1
 fi
 
 #cas où on doit creer le fichier lv_all_minmax
