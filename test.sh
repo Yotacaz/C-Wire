@@ -6,12 +6,15 @@ consommateur=$2
 id_centrales="${*:4}"
 
 #TODO verif existance
+
+
 chemin_resultat="test/"
 chemin_prog_c="codeC/"
 chemin_fichier_temp="tmp/"
 
 #initialise nom du fichier de sortie et creer l'en-tête
 init_fichier_sortie() {
+	#génération du nom du fichier de sortie
 	local nom_consommateur=""
 	case "$consommateur" in
 		all)
@@ -26,7 +29,8 @@ init_fichier_sortie() {
 		sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
 	fi
 	fichier_sortie="$chemin_resultat""$station"_"$consommateur""$sep_id_centrales".csv
-
+	
+	#génération de l'en tête du document
 	echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
 
 }
@@ -86,6 +90,7 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	
 	n_ligne=$(wc -l "$fichier_temp1" | cut -d ' ' -f1)
 	
+	#copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
 	if [ "$n_ligne" -lt 21  ]; then
 		cat "$fichier_temp2" >> "$fichier_minmax"
 	else	
