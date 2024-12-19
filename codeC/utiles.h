@@ -1,8 +1,8 @@
+#pragma once
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <assert.h>
-#pragma once
 
 int min2(int a, int b);
 int max2(int a, int b);
