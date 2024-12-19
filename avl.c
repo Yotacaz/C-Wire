@@ -7,9 +7,9 @@
 
 typedef struct _donneeStation             //raccourcie qui ralonge
 {
-    unsigned int ID_station;
-    unsigned int conso;
-    unsigned int capacite;
+    unsigned long ID_station;
+    unsigned long conso;
+    unsigned long capacite;
 } Donnee_station;
 
 typedef struct struct_nd
@@ -92,7 +92,7 @@ void afficherAVL(pAVL nd, int niveau)
     {
         printf("     "); // indentationint main(){
     }
-    printf("ID=%d ca=%d co=%d "
+    printf("ID=%lu ca=%lu co=%lu "
            "\x1B[0;34m"
            "%d\n"
            "\x1B[0m",
@@ -468,14 +468,14 @@ pAVL transfert_donné_ds_AVL(pAVL avl){
     Donnee_station donnee;
     bool existence = false;
     
-    while(scanf("%u;%u;%u", &donnee.ID_station, &donnee.capacite, &donnee.conso) == 3){
+    while(scanf("%lu;%lu;%lu", &donnee.ID_station, &donnee.capacite, &donnee.conso) == 3){
         existence = recherche(avl,donnee);
         avl=somme(avl,donnee,existence);
     } //fonctionne
     
     // int nb_scanné = 1;
     // do{
-    //     nb_scanné = scanf("%u;%u;%u", &donnee.ID_station, &donnee.capacite, &donnee.conso);
+    //     nb_scanné = scanf("%lu;%lu;%lu", &donnee.ID_station, &donnee.capacite, &donnee.conso);
     //     printf("\n\n %d \n \n",nb_scanné);
     //     if(nb_scanné == 3){
     //         existence = recherche(avl,donnee);
