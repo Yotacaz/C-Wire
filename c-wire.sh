@@ -198,23 +198,22 @@ if est_lv_all; then
 			else
 				conso_en_trop="NA"
 			fi
-			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$min_max"
-			minmax+="$n_station:$capa:$conso:$conso_en_trop"$'\n'
+			min_max+="$n_station:$capa:$conso:$conso_en_trop"$'\n'
 		done
 	} < "$fichier_sortie"
 	
 	#tris à ajout sur le fichier minmax
 	#tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':' 
 	min_max=$(sort -r -n --key=4 --field-separator=':' <<< "$min_max")
-	
+  
 	n_ligne=$(wc -l <<< "$min_max")
 	
 	#copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
 	if [ "$n_ligne" -lt 21  ]; then
-		cat "$min_max" >> "$fichier_minmax"
+		cat <<< "$min_max" >> "$fichier_minmax"
 	else
-		head -n 10 "$min_max" >> "$fichier_minmax"
-		tail -n 10 "$min_max" >> "$fichier_minmax"
+		head -n 10 <<< "$min_max" >> "$fichier_minmax"
+		tail -n 10 <<< "$min_max" >> "$fichier_minmax"
 	fi
 fi
 
