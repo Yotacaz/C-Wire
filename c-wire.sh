@@ -122,13 +122,21 @@ filtre=""
 if [ -n "$id_centrales" ]; then
   filtre="^($(echo "$id_centrales" | tr ' ' '|'));"
 else
-  filtre="^[^;]+;"
+  filtre="^[^;]+"
 fi
 
 case "$station" in
-  hvb) filtre="$filtre[0-9]+;-;" ;;
-  hva) filtre="$filtre[^;]+;[0-9]+;-;" ;;
-  lv) ;;
+  hvb) filtre="$filtre;[0-9]+;-;" ;;
+  hva) filtre="$filtre;[^;]+;[0-9]+;-;" ;;
+  lv)
+    fc=""
+    case "$consommateur" in
+      indiv) fc="-;[0-9];" ;;
+      comp) fc="[0-9];-;" ;;
+      all) fc="" ;;
+    esac
+    filtre="$filtre;-;-;[0-9]+;$fc"
+    ;;
 esac
 
 #génération du nom du fichier de sortie
