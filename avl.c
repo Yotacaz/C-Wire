@@ -471,7 +471,8 @@ pAVL transfert_donné_ds_AVL(pAVL avl){
     while(scanf("%lu;%lu;%lu", &donnee.ID_station, &donnee.capacite, &donnee.conso) == 3){
         existence = recherche(avl,donnee);
         avl=somme(avl,donnee,existence);
-    } //fonctionne
+    }
+    return avl;                                 //fonctionne
     
     // int nb_scanné = 1;
     // do{
@@ -495,7 +496,7 @@ int main()
     srand(time(NULL));
     pAVL avl = NULL;
     avl=transfert_donné_ds_AVL(avl);
-    // afficherAVL(avl,0);
-    // freeAVL(avl);
+    afficherAVL(avl,0);
+    freeAVL(avl);
     return 0;
 }
