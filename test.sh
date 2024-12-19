@@ -60,6 +60,7 @@ tempsExe=$(( $(date +%s) - tempsExe ))
 make -s -C "$chemin_prog_c" clean
 make -s -C "$chemin_prog_c"
 
+#tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':' 
 if ! ./"$chemin_prog_c""main" | sort -n --key=2 --field-separator=':' >> "$fichier_sortie"; then
 	echo "Une erreur a été rencontrée lors de l'execution du programme c"
 	exit 1
@@ -86,7 +87,7 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	
 	#tris à ajout sur le fichier minmax
 	fichier_temp2="$chemin_fichier_temp""tmp2"
-	#tris croissant en fonction de la 4eme colonne (conso en trop), séparées par des ':' 
+	#tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':' 
 	sort -r -n --key=4 --field-separator=':' "$fichier_temp1" > "$fichier_temp2"
 	
 	n_ligne=$(wc -l "$fichier_temp1" | cut -d ' ' -f1)
