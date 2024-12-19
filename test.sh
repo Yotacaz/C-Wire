@@ -5,12 +5,39 @@ consommateur=$2
 
 id_centrales="${*:4}"
 
-#TODO verif existance
 
 
 chemin_resultat="test/"
 chemin_prog_c="codeC/"
 chemin_fichier_temp="tmp/"
+chemin_graph="graphs/"
+chemin_input="input/"
+
+error=0
+#TODO verif existance
+if [ ! -d $chemin_prog_c ];then
+	error=1
+	echo "ERREUR: Le dossier $chemin_prog_c n'existe pas"
+fi
+if [ ! -d $chemin_fichier_temp ];then
+	mkdir $chemin_fichier_temp
+else
+	echo "$chemin_fichier_temp""*"	#TODO Marche pas
+	rm -rf ${chemin_fichier_temp:?}/*	#nettoyage du fichier temp
+fi
+
+if [ ! -d $chemin_resultat ];then
+	mkdir $chemin_resultat
+fi
+if [ ! -d $chemin_graph ];then
+	mkdir $chemin_graph
+fi
+if [ ! -d $chemin_input ];then
+	mkdir $chemin_input
+fi
+
+
+
 
 #initialise nom du fichier de sortie et creer l'en-tête
 init_fichier_sortie() {
