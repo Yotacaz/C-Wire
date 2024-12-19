@@ -7,37 +7,44 @@ id_centrales="${*:4}"
 
 
 
-chemin_resultat="test/"
-chemin_prog_c="codeC/"
-chemin_fichier_temp="tmp/"
-chemin_graph="graphs/"
-chemin_input="input/"
+CHEMIN_RESULTAT="test/"
+CHEMIN_PROG_C="codeC/"
+CHEMIN_FICHIER_TEMP="tmp/"
+CHEMIN_GRAPH="graphs/"
+CHEMIN_INPUT="input/"
+
+NOM_EXECUTABLE="main"
 
 error=0
 #TODO verif existance
-if [ ! -d $chemin_prog_c ];then
+if [ ! -d $CHEMIN_PROG_C ];then
 	error=1
-	echo "ERREUR: Le dossier $chemin_prog_c n'existe pas"
+	echo "ERREUR: Le dossier $CHEMIN_PROG_C n'existe pas"
 fi
-if [ ! -d $chemin_fichier_temp ];then
-	mkdir $chemin_fichier_temp
+if [ ! -d $CHEMIN_FICHIER_TEMP ];then
+	mkdir $CHEMIN_FICHIER_TEMP
 else
-	echo "$chemin_fichier_temp""*"	#TODO Marche pas
-	rm -rf ${chemin_fichier_temp:?}/*	#nettoyage du fichier temp
+	echo "$CHEMIN_FICHIER_TEMP""*"
+	rm -rf ${CHEMIN_FICHIER_TEMP:?}/*	#nettoyage du fichier temp
 fi
 
-if [ ! -d $chemin_resultat ];then
-	mkdir $chemin_resultat
+if [ ! -d $CHEMIN_RESULTAT ];then
+	mkdir $CHEMIN_RESULTAT
 fi
-if [ ! -d $chemin_graph ];then
-	mkdir $chemin_graph
+if [ ! -d $CHEMIN_GRAPH ];then
+	mkdir $CHEMIN_GRAPH
 fi
-if [ ! -d $chemin_input ];then
-	mkdir $chemin_input
+if [ ! -d $CHEMIN_INPUT ];then
+	mkdir $CHEMIN_INPUT
 fi
 
-
-
+# TODO En cours
+if [ ! -f $CHEMIN_PROG_C$NOM_EXECUTABLE ]; then
+	if ! make -s -C "$CHEMIN_PROG_C" ; then
+		echo "ERREUR lors de la compilation de l'executable"
+		exit 1
+	fi
+fi
 
 #initialise nom du fichier de sortie et creer l'en-tête
 init_fichier_sortie() {
@@ -55,7 +62,7 @@ init_fichier_sortie() {
 	if [ -n "$id_centrales" ]; then
 		sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
 	fi
-	fichier_sortie="$chemin_resultat""$station"_"$consommateur""$sep_id_centrales".csv
+	fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".csv
 	
 	#génération de l'en tête du document
 	echo "Station $station:capacite:consomation($nom_consommateur)" > "$fichier_sortie"
@@ -84,19 +91,19 @@ tempsExe=$(( $(date +%s) - tempsExe ))
 
 #compilation & exec des prog c
 #TODO test sur existance du Makefile
-make -s -C "$chemin_prog_c" clean
-make -s -C "$chemin_prog_c"
+make -s -C "$CHEMIN_PROG_C" clean
+make -s -C "$CHEMIN_PROG_C"
 
 #tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':' 
-if ! ./"$chemin_prog_c""main" | sort -n --key=2 --field-separator=':' >> "$fichier_sortie"; then
+if ! ./"$CHEMIN_PROG_C""main" | sort -n --key=2 --field-separator=':' >> "$fichier_sortie"; then
 	echo "Une erreur a été rencontrée lors de l'execution du programme c"
 	exit 1
 fi
 
 #cas où on doit creer le fichier lv_all_minmax
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
-	fichier_minmax="$chemin_resultat""lv_all_minmax.csv"
-	fichier_temp1="$chemin_fichier_temp""tmp1"
+	fichier_minmax="$CHEMIN_RESULTAT""lv_all_minmax.csv"
+	fichier_temp1="$CHEMIN_FICHIER_TEMP""tmp1"
 	{
 		#format de l'en tête : Station lv:capacite:consomation(tous):consomation en trop
 		read -r tete
@@ -113,7 +120,7 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	} < "$fichier_sortie"
 	
 	#tris à ajout sur le fichier minmax
-	fichier_temp2="$chemin_fichier_temp""tmp2"
+	fichier_temp2="$CHEMIN_FICHIER_TEMP""tmp2"
 	#tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':' 
 	sort -r -n --key=4 --field-separator=':' "$fichier_temp1" > "$fichier_temp2"
 	
