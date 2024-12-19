@@ -80,7 +80,7 @@ esac
 
 filtre_centrales=""
 if [ -n "$id_centrales" ]; then
-  filtre_centrales="^($(echo "$id_centrales" | tr ' ' '|'))+;"
+  filtre_centrales="^($(echo "$id_centrales" | tr ' ' '|'));"
 fi
 
 cat "$chemin" | tail -n+2 | grep -E "$filtre_centrales" | cut -d ";" -f "$id_station,7,8" | grep -v "^-" | tr '-' '0'
