@@ -11,7 +11,7 @@ int main()
   printf("2:30:233\n");
   printf("2:30:20\n");
   for (int i = 0; i<30; i++){
-    printf("2:30:%d\n",i);
+    printf("2:%d:%d\n",30-i,i);
   }
   return 0;
 }
