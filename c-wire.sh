@@ -174,6 +174,7 @@ fi
 if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 	fichier_minmax="$CHEMIN_RESULTAT""lv_all_minmax.csv"
 	fichier_temp1="$CHEMIN_FICHIER_TEMP""tmp1"
+  min_max=""
 	{
 		#format de l'en tête : Station lv:capacite:consomation(tous):consomation en trop
 		read -r tete
@@ -185,7 +186,8 @@ if [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; then
 			else
 				conso_en_trop="NA"
 			fi
-			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$fichier_temp1"
+			echo "$n_station:$capa:$conso:$conso_en_trop" >> "$min_max"
+			minmax+="$n_station:$capa:$conso:$conso_en_trop"$'\n'
 		done
 	} < "$fichier_sortie"
 	
