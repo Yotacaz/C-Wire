@@ -1,3 +1,4 @@
+#include <stdio.h>
 #pragma once
 
 typedef struct _donneeStation             //raccourcie qui ralonge
