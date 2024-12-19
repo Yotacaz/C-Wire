@@ -1,16 +1,15 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <stdbool.h>
-#include <time.h>
 #include "station.h"
 #include "utiles.h"
+#include <assert.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-typedef struct struct_nd
-{
-    int eq;                            //equilibre
-    Donnee_station val;                //valeur
+typedef struct struct_nd {
+    int eq;             // equilibre
+    Donnee_station val; // valeur
     struct struct_nd *fg;
     struct struct_nd *fd;
 } Noeud;

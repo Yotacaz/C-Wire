@@ -1,9 +1,9 @@
 #pragma once
-#include <stdio.h>
-#include <stdbool.h>
-#include "station.h"
 #include "avl.h"
+#include "station.h"
+#include <stdbool.h>
+#include <stdio.h>
 
-pAVL somme(pAVL avl,Donnee_station donne,bool existe);
+pAVL somme(pAVL avl, Donnee_station donne, bool existe);
 pAVL transfert_donne_ds_AVL(pAVL avl);
-bool recherche(pAVL arbre,Donnee_station elm);
+bool recherche(pAVL arbre, Donnee_station elm);
