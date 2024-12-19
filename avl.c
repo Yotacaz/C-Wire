@@ -255,7 +255,7 @@ pAVL insertionAVL(Noeud *racine, Donnee_station val)
     return nd;
 }
 
-Noeud *suppMax(Noeud *nd, int *max, int *h)
+Noeud *suppMax(Noeud *nd, unsigned long *max, int *h)
 {
     assert(max);
     assert(nd);
