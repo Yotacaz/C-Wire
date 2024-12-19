@@ -131,11 +131,11 @@ case "$station" in
   lv)
     fc=""
     case "$consommateur" in
-      indiv) fc="-;[0-9];" ;;
-      comp) fc="[0-9];-;" ;;
+      indiv) fc="-;[0-9]+;" ;;
+      comp) fc="[0-9]+;-;" ;;
       all) fc="" ;;
     esac
-    filtre="$filtre;[^;];[^;];[0-9]+;$fc"
+    filtre="$filtre;[^;]+;[^;]+;[0-9]+;$fc"
     ;;
 esac
 
