@@ -1,6 +1,7 @@
 #include "avl.h"
 #include "station.h"
 
+//affiche un arbre à la vertical comme si on l'écrivé sur papier
 void afficherAVL(pAVL nd, int niveau)
 {
     if (nd == NULL)
@@ -25,6 +26,8 @@ void afficherAVL(pAVL nd, int niveau)
     // Affiche ensuite le sous-arbre gauche
     afficherAVL(nd->fg, niveau + 1);
 }
+
+//renvoie les données finaux au shel grâce à un parcours infixe
 void affichageinfixe(pAVL noeuds)
 {
 	if(existe_fg(noeuds) == true){
