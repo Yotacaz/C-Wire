@@ -118,12 +118,20 @@ case "$station" in
   lv) id_station=4 ;;
 esac
 
-filtre_centrales=""
+filtre=""
 if [ -n "$id_centrales" ]; then
-  filtre_centrales="^($(echo "$id_centrales" | tr ' ' '|'));"
+  filtre="^($(echo "$id_centrales" | tr ' ' '|'));"
+else
+  filtre="^[^;]+;"
 fi
 
-cat "$chemin" | tail -n+2 | grep -E "$filtre_centrales" | cut -d ";" -f "$id_station,7,8" | grep -v "^-" | tr '-' '0'
+case "$station" in
+  hvb) filtre="$filtre[0-9]+;-;" ;;
+  hva) filtre="$filtre[^;]+;[0-9]+;-;" ;;
+  lv) ;;
+esac
+
+cat "$chemin" | tail -n+2 | grep -E "$filtre" | cut -d ";" -f "$id_station,7,8" | grep -v "^-" | tr '-' '0'
 
 
 #SORTIE DU FICHIER C
