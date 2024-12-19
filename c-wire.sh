@@ -126,13 +126,13 @@ else
 fi
 
 case "$station" in
-  hvb) filtre="$filtre;[^;]+;-;" ;;
-  hva) filtre="$filtre;[^;]+;[^;]+;-;" ;;
+  hvb) filtre="$filtre;[0-9]+;-;" ;;
+  hva) filtre="$filtre;[^;]+;[0-9]+;-;" ;;
   lv)
     fc=""
     case "$consommateur" in
-      indiv) fc="-;[0-9]+;" ;;
-      comp) fc="[0-9]+;-;" ;;
+      indiv) fc="-;[^;]+;" ;;
+      comp) fc="[^;]+;-;" ;;
       all) fc="" ;;
     esac
     filtre="$filtre;[^;]+;[^;]+;[0-9]+;$fc"
