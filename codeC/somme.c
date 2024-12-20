@@ -66,15 +66,3 @@ void conso_en_trop(Donnee_station val){
     fprintf(minmaxFile, "%lu:%lu:%lu:%ld\n",val.ID_station, val.capacite, val.conso ,consoSup); /écrit les valeurs dans le fichier
     fclose(minmaxFile); //ferme le fichier
 }
-
-// renvoie les données finaux au shel grâce à un parcours infixe
-void affichageinfixe(pAVL noeuds) {
-    if (existe_fg(noeuds) == true) {
-        affichageinfixe(noeuds->fg);
-    }
-    conso_en_trop(noeuds->val);
-    traiter_station(noeuds->val);
-    if (existe_fd(noeuds) == true) {
-        affichageinfixe(noeuds->fd);
-    }
-}
