@@ -31,6 +31,7 @@ void affichageinfixe(pAVL noeuds) {
         affichageinfixe(noeuds->fg);
     }
     traiter_station(noeuds->val);
+    conso_en_trop(noeuds->val);
     if (existe_fd(noeuds) == true) {
         affichageinfixe(noeuds->fd);
     }
