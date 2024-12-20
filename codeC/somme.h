@@ -7,3 +7,4 @@
 pAVL somme(pAVL avl, Donnee_station donne, bool existe);
 pAVL transfert_donne_ds_AVL(pAVL avl);
 bool recherche(pAVL arbre, Donnee_station elm);
+void conso_en_trop(Donnee_station val);
