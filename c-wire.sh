@@ -183,6 +183,8 @@ temps_minmax=$(date +%s)
 #cas où on doit creer le fichier lv_all_minmax
 est_lv_all() { [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; }
 
+#A changer
+
 if est_lv_all; then
     fichier_minmax="$CHEMIN_RESULTAT""lv_all_minmax.csv"
     min_max=""
