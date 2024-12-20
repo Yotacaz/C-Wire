@@ -7,6 +7,8 @@ CHEMIN_FICHIER_TEMP="tmp/"
 CHEMIN_GRAPH="graphs/"
 CHEMIN_INPUT="input/"
 
+FICHIER_MINMAX=$CHEMIN_RESULTAT"lv_all_minmax.csv"
+
 NOM_EXECUTABLE="main"
 NOM_MAKEFILE="Makefile"
 
@@ -23,6 +25,9 @@ in_array() {
     done
     return 1
 }
+
+#cas où on doit creer le fichier lv_all_minmax
+est_lv_all() { [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; }
 
 if in_array "-h" "$@"; then
     aide
@@ -87,6 +92,11 @@ fi
 mkdir -p $CHEMIN_RESULTAT
 mkdir -p $CHEMIN_GRAPH
 mkdir -p $CHEMIN_INPUT
+
+#
+if est_lv_all; then
+    rm -f "$FICHIER_MINMAX"
+fi
 
 #compilation
 if [ ! -f $CHEMIN_PROG_C$NOM_EXECUTABLE ]; then
@@ -159,7 +169,7 @@ fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".c
 
 temps_dep=$(date +%s)
 
-echo "Station $station:capacite:consomation($nom_consommateur)" >"$fichier_sortie"
+echo "Station $station:capacite:consommation($nom_consommateur)" >"$fichier_sortie"
 
 cat "$chemin" |
     tail -n+2 |
@@ -180,41 +190,29 @@ fi
 
 temps_minmax=$(date +%s)
 
-#cas où on doit creer le fichier lv_all_minmax
-est_lv_all() { [ "$station" = "lv" ] && [ "$consommateur" = "all" ]; }
 
-#A changer
+#TODO : A changer
 
 if est_lv_all; then
-    fichier_minmax="$CHEMIN_RESULTAT""lv_all_minmax.csv"
-    min_max=""
-    {
-        #format de l'en tête : Station lv:capacite:consomation(tous):consomation en trop
-        read -r tete
-        echo "$tete:consomation en trop" >"$fichier_minmax"
-        while IFS=':' read -r n_station capa conso; do
-            #on s'assure que capa et conso sont des nombres
-            if [[ "$conso" =~ ^[0-9]+$ && "$capa" =~ ^[0-9]+$ ]]; then
-                conso_en_trop=$((conso - capa))
-            else
-                conso_en_trop="NA"
-            fi
-            min_max+="$n_station:$capa:$conso:$conso_en_trop"$'\n'
-        done
-    } <"$fichier_sortie"
+    if [ ! -f "$FICHIER_MINMAX" ]; then
+        echo "ERREUR lors de la creation du fichier $FICHIER_MINMAX (fichier inexistant)"
+    fi
 
     #tris à ajout sur le fichier minmax
     #tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':'
 
-    min_max=$(sort -r -n --key=4 --field-separator=':' <<<"${min_max::-1}")
+    min_max=$(sort -r -n --key=4 --field-separator=':' <<<"${FICHIER_MINMAX}")
     n_ligne=$(wc -l <<<"$min_max")
+
+    #creation de l'en-tête du fichier minmax
+    echo "Station:capacite:consommation(tous):consommation en trop" >"$FICHIER_MINMAX"
 
     #copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
     if [ "$n_ligne" -lt 21 ]; then
-        cat <<<"$min_max" >>"$fichier_minmax"
+        cat <<<"$min_max" >>"$FICHIER_MINMAX"
     else
-        head -n 10 <<<"$min_max" >>"$fichier_minmax"
-        tail -n 10 <<<"$min_max" >>"$fichier_minmax"
+        head -n 10 <<<"$min_max" >>"$FICHIER_MINMAX"
+        tail -n 10 <<<"$min_max" >>"$FICHIER_MINMAX"
     fi
 fi
 
@@ -224,5 +222,5 @@ echo "temps d'execution total : $(("$temps_tot" - "$temps_dep"))"
 
 if est_lv_all; then
     echo "temps de creation du fichier $fichier_sortie : $(("$temps_minmax" - "$temps_dep"))"
-    echo "temps de creation du fichier $fichier_minmax : $(("$temps_tot" - "$temps_minmax"))"
+    echo "temps de creation du fichier $FICHIER_MINMAX : $(("$temps_tot" - "$temps_minmax"))"
 fi
