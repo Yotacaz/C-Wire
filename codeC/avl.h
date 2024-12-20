@@ -30,4 +30,4 @@ pAVL insertionAVL(Noeud *racine, Donnee_station val);
 Noeud *suppMax(Noeud *nd, unsigned long *max, int *h);
 Noeud *suppValAVLrec(Noeud *nd, Donnee_station val, int *h);
 pAVL suppValAVL(pAVL racine, Donnee_station val);
-void freeAVL(pAVL avl);
+void liberer_AVL(pAVL avl);

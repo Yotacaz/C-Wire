@@ -20,6 +20,6 @@ int main() {
     pAVL avl = NULL;
     avl = transfert_donne_ds_AVL(avl);
     affichageinfixe(avl);
-    freeAVL(avl);
+    liberer_AVL(avl);
     return 0;
 }

@@ -2,6 +2,7 @@
 #include "station.h"
 #include "utiles.h"
 
+//initialise le noeud d'un avl
 pAVL creerAVL(Donnee_station val) {
     pAVL avl = malloc(sizeof(Noeud));
     assert(avl);
@@ -14,16 +15,19 @@ pAVL creerAVL(Donnee_station val) {
     return avl;
 }
 
+// renvoie vrai si le noeud a un fils droit
 bool existe_fd(Noeud *nd) {
     assert(nd); // cas pas pris en charge
     return nd->fd != NULL;
 }
 
+// renvoie vrai si le noeud a un fils gauche
 bool existe_fg(Noeud *nd) {
     assert(nd); // cas pas pris en charge
     return nd->fg != NULL;
 }
 
+// verifie si l'arbre est equilibre et si les eq sont corrects
 int assertAVL(pAVL a) {
     if (!a) {
         return 0;
@@ -36,6 +40,7 @@ int assertAVL(pAVL a) {
     return (hg > hd) ? hg + 1 : hd + 1; // on retourne la hauteur du parent
 }
 
+// rotation gauche d'un noeud
 Noeud *rotationGauche(Noeud *nd) {
     assert(nd);
     // assert(nd->eq ==2);
@@ -57,6 +62,7 @@ Noeud *rotationGauche(Noeud *nd) {
     return pivot;
 }
 
+// rotation droite
 Noeud *rotationDroite(Noeud *nd) {
     assert(nd);
     // assert(nd->eq ==-2);
@@ -147,6 +153,7 @@ Noeud *insertionAVLrec(Noeud *nd, Donnee_station val, int *h) {
     return nd;
 }
 
+// insere une station dans un avl, renvoie la racine
 pAVL insertionAVL(Noeud *racine, Donnee_station val) {
     int h = 0;
     Noeud *nd = insertionAVLrec(racine, val, &h);
@@ -154,6 +161,7 @@ pAVL insertionAVL(Noeud *racine, Donnee_station val) {
     return nd;
 }
 
+// supprime la valeur max d'un arbre et la stocke dans max
 Noeud *suppMax(Noeud *nd, unsigned long *max, int *h) {
     assert(max);
     assert(nd);
@@ -213,6 +221,7 @@ Noeud *suppValAVLrec(Noeud *nd, Donnee_station val, int *h) {
     return nd;
 }
 
+// supprime une station de l'arbre et renvoie la racine
 pAVL suppValAVL(pAVL racine, Donnee_station val) {
     assert(racine);
     int h = 0;
@@ -220,11 +229,12 @@ pAVL suppValAVL(pAVL racine, Donnee_station val) {
     return tmp;
 }
 
-void freeAVL(pAVL avl) {
+// libere la memoire allouée pour un avl
+void liberer_AVL(pAVL avl) {
     if (!avl) {
         return;
     }
-    freeAVL(avl->fg);
-    freeAVL(avl->fd);
+    liberer_AVL(avl->fg);
+    liberer_AVL(avl->fd);
     free(avl);
 }
