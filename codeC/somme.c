@@ -60,9 +60,9 @@ bool recherche(pAVL arbre, Donnee_station elm) {
 void conso_en_trop(Donnee_station val){
     FILE* minmaxFile;
     long consoSup = val.capacite-val.conso;
-    if(minmaxFile = fopen("test/lv_all_minmax.csv","a")== NULL){ 
-    exit(9);
-    }//ouvre le fichier 
-    fprintf(minmaxFile, "%lu:%lu:%lu:%ld\n",val.ID_station, val.capacite, val.conso ,consoSup); //écrit les valeurs dans le fichier
-    fclose(minmaxFile); //ferme le fichier
+    // if(minmaxFile = fopen("test/lv_all_minmax.csv","a")== NULL){
+    // exit(9);
+    // }//ouvre le fichier
+    // fprintf(minmaxFile, "%lu:%lu:%lu:%ld\n",val.ID_station, val.capacite, val.conso ,consoSup); //écrit les valeurs dans le fichier
+    // fclose(minmaxFile); //ferme le fichier
 }

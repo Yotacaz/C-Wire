@@ -197,7 +197,6 @@ fi
 temps_minmax=$(date +%s)
 
 
-#TODO : A changer
 
 if est_lv_all; then
     if [ ! -f "$FICHIER_MINMAX" ]; then
@@ -226,6 +225,5 @@ temps_tot=$(date +%s)
 echo "temps d'execution total : $(("$temps_tot" - "$temps_dep"))"
 
 if est_lv_all; then
-    echo "temps de filtrage et creation du fichier $fichier_sortie : $(("$temps_minmax" - "$temps_dep"))"
     echo "temps de creation du fichier $FICHIER_MINMAX : $(("$temps_tot" - "$temps_minmax"))"
 fi

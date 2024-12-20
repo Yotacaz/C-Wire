@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 #include "avl.h"
 #include "avlUtile.h"
@@ -29,6 +28,6 @@ int main(int argc, char const *argv[]) {
         fclose(fichier);
     }
 
-    liberer_AVL(avl);
+    liberer_AVL(avl);   //free avl
     return 0;
 }
