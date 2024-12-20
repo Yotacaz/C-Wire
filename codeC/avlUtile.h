@@ -7,4 +7,5 @@
 #include <stdlib.h>
 
 void afficherAVL(pAVL nd, int niveau);
-void affichageinfixe(pAVL noeuds);
+void affichage_infixe(pAVL noeuds);
+void affichage_infixe_minmax(FILE* fichier, pAVL noeud);

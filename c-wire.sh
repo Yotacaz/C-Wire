@@ -93,12 +93,18 @@ mkdir -p $CHEMIN_RESULTAT
 mkdir -p $CHEMIN_GRAPH
 mkdir -p $CHEMIN_INPUT
 
-#
+
+#Si on doit creer le fichier lv_all_minmax
+#alors son chemin absolu est non vide (norme prise ici)
+chemin_absolut_minmax=""
 if est_lv_all; then
     rm -f "$FICHIER_MINMAX"
+    chemin_absolut_minmax=$(pwd)"/$FICHIER_MINMAX"
 fi
 
 #compilation
+#TODO A SUPPRIMER
+make -s -C "$CHEMIN_PROG_C" clean
 if [ ! -f $CHEMIN_PROG_C$NOM_EXECUTABLE ]; then
     if ! make -s -C "$CHEMIN_PROG_C"; then
         echo "ERREUR lors de la compilation de l'executable"
@@ -177,7 +183,7 @@ cat "$chemin" |
     cut -d ";" -f "$id_station,7,8" |
     grep -v "^-" |
     tr '-' '0' |
-    ./"$CHEMIN_PROG_C""main" |
+    ./"$CHEMIN_PROG_C""main" "$chemin_absolut_minmax" |
     sort -n --key=2 --field-separator=':' \
         >>"$fichier_sortie"
 #tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':'
@@ -201,12 +207,11 @@ if est_lv_all; then
     #tris à ajout sur le fichier minmax
     #tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':'
 
-    min_max=$(sort -r -n --key=4 --field-separator=':' <<<"${FICHIER_MINMAX}")
+    min_max=$(sort -n --key=4 --field-separator=':' "$FICHIER_MINMAX")
     n_ligne=$(wc -l <<<"$min_max")
 
     #creation de l'en-tête du fichier minmax
-    echo "Station:capacite:consommation(tous):consommation en trop" >"$FICHIER_MINMAX"
-
+    echo "Station lv:capacite:consommation(tous):consommation en trop" >"$FICHIER_MINMAX"
     #copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
     if [ "$n_ligne" -lt 21 ]; then
         cat <<<"$min_max" >>"$FICHIER_MINMAX"

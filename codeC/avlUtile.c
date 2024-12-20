@@ -25,14 +25,23 @@ void afficherAVL(pAVL nd, int niveau) {
     afficherAVL(nd->fg, niveau + 1);
 }
 
-// renvoie les données finaux au shel grâce à un parcours infixe
-void affichageinfixe(pAVL noeuds) {
-    if (existe_fg(noeuds) == true) {
-        affichageinfixe(noeuds->fg);
+// renvoie les données finales au shell grâce à un parcours infixe
+void affichage_infixe(pAVL noeud) {
+    if (existe_fg(noeud) == true) {
+        affichage_infixe(noeud->fg);
     }
-    traiter_station(noeuds->val);
-    conso_en_trop(noeuds->val);
-    if (existe_fd(noeuds) == true) {
-        affichageinfixe(noeuds->fd);
+    traiter_station(noeud->val);
+    if (existe_fd(noeud) == true) {
+        affichage_infixe(noeud->fd);
     }
+}
+
+// renvoie les données finales au shell grâce à un parcours infixe
+void affichage_infixe_minmax(FILE* fichier, pAVL noeud) {
+    if (!noeud){
+        return;
+    }
+    affichage_infixe_minmax(fichier, noeud->fg);
+    traiter_station_minmax(fichier, noeud->val);
+    affichage_infixe_minmax(fichier, noeud->fd);
 }
