@@ -13,7 +13,10 @@ Pour commencer, ouvrez ce repertoire sur une console, puis executez le fichier s
 
 En cas d'utilisation en `lv all`, un fichier supplémentaire sera généré, avec les 10 postes lv consommant le plus d'énergie comparé à leur capacité, et les 10 postes lv consommant le moins d'énergie par rapport à leur capacité.
 
-Exemples d'utilisation : *bash c-wire.sh input/data.csv lv all*, *bash c-wire.sh input/data.csv hva comp 1*
+Exemples d'utilisation :
+
+- *bash c-wire.sh input/data.csv lv all*
+- *bash c-wire.sh input/data.csv hva comp 1*
 
 Notes:
 
