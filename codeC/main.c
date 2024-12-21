@@ -13,6 +13,7 @@ int main(int argc, char const *argv[]) {
     assert(nom_fichier);
     pAVL avl = NULL;
     avl = transfert_donne_ds_AVL(avl);
+    assert(avl);    //Il doit y avoir au moins une station dans l'AVL
     affichage_infixe(avl);
 
     //Si un fichier est passé en argument, on écrit l'arbre avec

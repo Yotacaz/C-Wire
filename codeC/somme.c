@@ -2,8 +2,8 @@
 #include "avl.h"
 #include "station.h"
 
-// fonction qui adtitionne les consomation au station si elle existe et les crée
-// si elle n'existe pas
+// fonction qui additionne les consommation aux stations si elles existent et les crées
+// si elles n'existent pas
 pAVL somme(pAVL avl, Donnee_station donne, bool existe) {
     if (existe == true) {
         if (avl->val.ID_station > donne.ID_station && existe_fg(avl) == true) {
@@ -21,12 +21,12 @@ pAVL somme(pAVL avl, Donnee_station donne, bool existe) {
     return avl;
 }
 
-// récupére les donnés du shel et vérifier qu'elle soit entière puis les sommes
+// récupère les donnés du shell et vérifie qu'elle sont entière, puis les sommes
 // avec la fonction ci-dessus.
 pAVL transfert_donne_ds_AVL(pAVL avl) {
     Donnee_station donnee;
     bool existence = false;
-    short nb_scanne = 1;
+    int nb_scanne = 1;
     do {
         nb_scanne = scanf("%lu;%lu;%lu", &donnee.ID_station, &donnee.capacite,
                           &donnee.conso);
@@ -42,7 +42,7 @@ pAVL transfert_donne_ds_AVL(pAVL avl) {
     } while (nb_scanne == 3);
 }
 
-// recherche si la station existe déja dans l'AVL
+// recherche si la station existe déjà dans l'AVL
 bool recherche(pAVL arbre, Donnee_station elm) {
     if (arbre == NULL) {
         return false;

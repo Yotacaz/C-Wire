@@ -27,13 +27,13 @@ void afficherAVL(pAVL nd, int niveau) {
 
 // renvoie les données finales au shell grâce à un parcours infixe
 void affichage_infixe(pAVL noeud) {
-    if (existe_fg(noeud) == true) {
-        affichage_infixe(noeud->fg);
+    if (!noeud){
+        return;
     }
+    affichage_infixe(noeud->fg);
     traiter_station(noeud->val);
-    if (existe_fd(noeud) == true) {
-        affichage_infixe(noeud->fd);
-    }
+    affichage_infixe(noeud->fd);
+
 }
 
 // renvoie les données finales au shell grâce à un parcours infixe
