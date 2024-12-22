@@ -1,4 +1,4 @@
-# **C-Wire**
+# **Projet C-Wire**
 
 **Un projet de groupe d'école pour gérer la distribution sur des réseaux électriques de plusieurs centrales.** (groupe MI3-K)
 Ce projet permet de visualiser la capacité en kWh d'un type de station de distribution d'un réseau électrique et de la consommation des utilisateurs directements branché à celle-ci.
