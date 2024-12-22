@@ -72,17 +72,20 @@ fi
 
 if [ $error -eq 1 ]; then
     aide
+    echo "Terminé avec des erreurs en 0s"
     exit 1
 fi
 
 #verification d'existance des dossiers et fichiers nécéssaires à l'execution
 if [ ! -d $CHEMIN_PROG_C ]; then
     echo "ERREUR: Le dossier $CHEMIN_PROG_C n'existe pas"
+    echo "Terminé avec des erreurs en 0s"
     exit 1
 fi
 
 if [ ! -f $CHEMIN_PROG_C$NOM_MAKEFILE ]; then
     echo "ERREUR: Le fichier $CHEMIN_PROG_C$NOM_MAKEFILE n'existe pas"
+    echo "Terminé avec des erreurs en 0s"
     exit 1
 fi
 
@@ -111,6 +114,7 @@ make -s -C "$CHEMIN_PROG_C" clean
 if [ ! -f $CHEMIN_PROG_C$NOM_EXECUTABLE ]; then
     if ! make -s -C "$CHEMIN_PROG_C"; then
         echo "ERREUR lors de la compilation de l'executable"
+        echo "Terminé avec des erreurs en 0s"
         exit 1
     fi
 fi
@@ -136,6 +140,7 @@ hva) id_station=3 ;;
 lv) id_station=4 ;;
 esac
 
+#regex du numéro de centrale
 filtre=""
 if [ -n "$id_centrales" ]; then
     filtre="^($(echo "$id_centrales" | tr ' ' '|'))"
@@ -143,6 +148,7 @@ else
     filtre="^[^;]+"
 fi
 
+#regex de la station et du consommateur
 case "$station" in
 hvb) filtre="$filtre;[0-9]+;-;" ;;
 hva) filtre="$filtre;[^;]+;[0-9]+;-;" ;;
@@ -156,8 +162,6 @@ lv)
     filtre="$filtre;[^;]+;[^;]+;[0-9]+;$fc"
     ;;
 esac
-
-echo "Filtre: $filtre (fc: $fc)"
 
 #génération du nom du fichier de sortie
 sep_id_centrales=""
@@ -188,7 +192,7 @@ esac
 echo "Station $nom_station:Capacité:Consommation ($nom_consommateur)" >"$fichier_sortie"
 
 #Début de l'execution de l'application
-temps_dep=$(date +%s)   #temps de départ (chronométrage)
+temps_dep=$(date +%s) #temps de départ (chronométrage)
 
 #filtrage des données envoyées au programme c et execution
 cat "$chemin" |
@@ -197,22 +201,27 @@ cat "$chemin" |
     cut -d ";" -f "$id_station,7,8" |
     grep -v "^-" |
     tr '-' '0' |
-    ./"$CHEMIN_PROG_C""main" "$chemin_absolut_minmax" |
+    ./"$CHEMIN_PROG_C""$NOM_EXECUTABLE" "$chemin_absolut_minmax" |
     sort -n --key=2 --field-separator=':' \
         >>"$fichier_sortie"
 
-#verification de la réussite de l'execution du programme c
-if in_array 1 "${PIPESTATUS[@]}"; then
-    echo "Une erreur a été rencontrée lors de l'execution du programme c"
-    exit 1
-fi
+#verification de la réussite de l'execution du programme C
+for status in "${PIPESTATUS[@]}"; do
+    if [ "$status" -ne 0 ]; then
+        echo "Une erreur a été rencontrée lors de l'execution du programme C"
+        echo "Terminé avec des erreurs en $(($(date +%s) - "$temps_dep"))s"
+        exit 1
+    fi
+done
 
 #cas où on doit creer le fichier lv_all_minmax
-temps_minmax=$(date +%s)    #temps de début de création du fichier minmax (chronométrage)
+temps_minmax=$(date +%s) #chronométrage début de création du fichier minmax
 
 if est_lv_all; then
     if [ ! -f "$FICHIER_MINMAX" ]; then
         echo "ERREUR lors de la creation du fichier $FICHIER_MINMAX (fichier inexistant)"
+        echo "Terminé avec des erreurs en $(($(date +%s) - "$temps_dep"))s"
+        exit 1
     fi
 
     #tris numérique en fonction de la 4eme colonne (conso en trop), séparées par des ':'
@@ -232,12 +241,11 @@ if est_lv_all; then
     fi
 fi
 
-
 #affichage des temps d'execution
-temps_tot=$(date +%s)   #temps de fin d'execution (chronométrage)
+temps_tot=$(date +%s) #temps de fin d'execution (chronométrage)
 
-echo "temps d'execution total : $(("$temps_tot" - "$temps_dep"))"
+echo "Succès. Temps d'execution total : $(("$temps_tot" - "$temps_dep"))"
 
 if est_lv_all; then
-    echo "temps de creation du fichier $FICHIER_MINMAX : $(("$temps_tot" - "$temps_minmax"))"
+    echo "Temps de creation du fichier $FICHIER_MINMAX : $(("$temps_tot" - "$temps_minmax"))"
 fi
