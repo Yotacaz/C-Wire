@@ -206,14 +206,14 @@ if est_lv_all; then
         echo "ERREUR lors de la creation du fichier $FICHIER_MINMAX (fichier inexistant)"
     fi
 
-    #tris à ajout sur le fichier minmax
-    #tris décroissant en fonction de la 4eme colonne (conso en trop), séparées par des ':'
+    #tris numérique en fonction de la 4eme colonne (conso en trop), séparées par des ':'
 
     min_max=$(sort -n --key=4 --field-separator=':' "$FICHIER_MINMAX")
     n_ligne=$(wc -l <<<"$min_max")
 
     #creation de l'en-tête du fichier minmax
-    echo "Station LV:Capacité:consommation (tous):consommation en trop" >"$FICHIER_MINMAX"
+    printf "Nœuds extrêmes de « charge de capacité » minimale et maximale (consommation en trop)\n'Station LV:Capacité:consommation (tous):charge de capacité\n" >"$FICHIER_MINMAX"
+
     #copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
     if [ "$n_ligne" -lt 21 ]; then
         cat <<<"$min_max" >>"$FICHIER_MINMAX"
