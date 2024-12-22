@@ -12,10 +12,12 @@ FICHIER_MINMAX=$CHEMIN_RESULTAT"lv_all_minmax.csv"
 NOM_EXECUTABLE="main"
 NOM_MAKEFILE="Makefile"
 
+#fonction d'aide pour l'utilisation du script shell
 aide() {
     echo "Utilisation: $0 <chemin> <station> <consommateur> [<centrales>]"
 }
 
+#fonction pour vérifie si un élément est dans une chaine de caractères
 in_array() {
     local e
     for e in "${@:2}"; do
@@ -34,6 +36,7 @@ if in_array "-h" "$@"; then
     exit 0
 fi
 
+#Vérification des arguments
 if [ $# -lt 3 ]; then
     echo "ERREUR: Pas assez d'arguments"
     aide
@@ -45,6 +48,7 @@ station="$2"
 consommateur="$3"
 id_centrales="${*:4}"
 
+#Vérification de la cohérence des arguments
 error=0
 if [ ! -f "$chemin" ]; then
     echo "ERREUR: Le fichier \"$chemin\" n'existe pas"
@@ -71,7 +75,7 @@ if [ $error -eq 1 ]; then
     exit 1
 fi
 
-#verif existance
+#verification d'existance des dossiers et fichiers nécéssaires à l'execution
 if [ ! -d $CHEMIN_PROG_C ]; then
     echo "ERREUR: Le dossier $CHEMIN_PROG_C n'existe pas"
     exit 1
@@ -123,6 +127,8 @@ fi
 # | idc |  -  |  -  | idv | ide |  -  |  -  | conso | Entreprise sur LV (id centrale, id lv, id entp et consommation)
 # | idc |  -  |  -  | idv |  -  | idp |  -  | conso | Particulier sur LV (id centrale, id lv, id particulier et consommation)
 
+#définition du filtre en fonction de la station et du consommateur
+#on utilisera des expressions régulières pour filtrer les données
 id_station=""
 case "$station" in
 hvb) id_station=2 ;;
@@ -151,12 +157,12 @@ lv)
     ;;
 esac
 
+
+#génération du nom du fichier de sortie
 sep_id_centrales=""
 if [ -n "$id_centrales" ]; then
     sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
 fi
-
-#génération du nom du fichier de sortie
 fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".csv
 
 #génération de l'en tête du fichier de sortie
@@ -180,8 +186,10 @@ esac
 
 echo "Station $nom_station:Capacité:Consommation ($nom_consommateur)" >"$fichier_sortie"
 
-temps_dep=$(date +%s)
+#Début de l'execution de l'application
+temps_dep=$(date +%s)   #temps de départ (chronométrage)
 
+#filtrage des données envoyées au programme c et execution
 cat "$chemin" |
     tail -n+2 |
     grep -E "$filtre" |
@@ -191,15 +199,15 @@ cat "$chemin" |
     ./"$CHEMIN_PROG_C""main" "$chemin_absolut_minmax" |
     sort -n --key=2 --field-separator=':' \
         >>"$fichier_sortie"
-#tris des donnes de sortie croissant en fonction de la 2eme colonne (capacité), séparées par des ':'
 
+#verification de la réussite de l'execution du programme c
 if in_array 1 "${PIPESTATUS[@]}"; then
     echo "Une erreur a été rencontrée lors de l'execution du programme c"
     exit 1
 fi
-#SORTIE DU FICHIER C
 
-temps_minmax=$(date +%s)
+#cas où on doit creer le fichier lv_all_minmax
+temps_minmax=$(date +%s)    #temps de début de création du fichier minmax (chronométrage)
 
 if est_lv_all; then
     if [ ! -f "$FICHIER_MINMAX" ]; then
@@ -223,7 +231,9 @@ if est_lv_all; then
     fi
 fi
 
-temps_tot=$(date +%s)
+
+#affichage des temps d'execution
+temps_tot=$(date +%s)   #temps de fin d'execution (chronométrage)
 
 echo "temps d'execution total : $(("$temps_tot" - "$temps_dep"))"
 
