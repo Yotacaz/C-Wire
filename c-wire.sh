@@ -93,7 +93,6 @@ mkdir -p $CHEMIN_RESULTAT
 mkdir -p $CHEMIN_GRAPH
 mkdir -p $CHEMIN_INPUT
 
-
 #Si on doit creer le fichier lv_all_minmax
 #alors son chemin absolu est non vide (norme prise ici)
 chemin_absolut_minmax=""
@@ -126,9 +125,9 @@ fi
 
 id_station=""
 case "$station" in
-    hvb) id_station=2 ;;
-    hva) id_station=3 ;;
-    lv) id_station=4 ;;
+hvb) id_station=2 ;;
+hva) id_station=3 ;;
+lv) id_station=4 ;;
 esac
 
 filtre=""
@@ -139,25 +138,23 @@ else
 fi
 
 case "$station" in
-    hvb) filtre="$filtre;[0-9]+;-;" ;;
-    hva) filtre="$filtre;[^;]+;[0-9]+;-;" ;;
-    lv)
-        fc=""
-        case "$consommateur" in
-            indiv) fc="-;[^;]+;" ;;
-            comp) fc="[^;]+;-;" ;;
-            all) fc="" ;;
-        esac
-        filtre="$filtre;[^;]+;[^;]+;[0-9]+;$fc"
-        ;;
+hvb) filtre="$filtre;[0-9]+;-;" ;;
+hva) filtre="$filtre;[^;]+;[0-9]+;-;" ;;
+lv)
+    fc=""
+    case "$consommateur" in
+    indiv) fc="-;[^;]+;" ;;
+    comp) fc="[^;]+;-;" ;;
+    all) fc="" ;;
+    esac
+    filtre="$filtre;[^;]+;[^;]+;[0-9]+;$fc"
+    ;;
 esac
-
 
 sep_id_centrales=""
 if [ -n "$id_centrales" ]; then
     sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
 fi
-
 
 #génération du nom du fichier de sortie
 fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".csv
@@ -165,24 +162,23 @@ fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".c
 #génération de l'en tête du fichier de sortie
 nom_consommateur=""
 case "$consommateur" in
-    all)
-        nom_consommateur="tous"
-        ;;
-    comp)
-        nom_consommateur="entreprises"
-        ;;
-    indiv)
-        nom_consommateur="individus"
-        ;;
+all)
+    nom_consommateur="tous"
+    ;;
+comp)
+    nom_consommateur="entreprises"
+    ;;
+indiv)
+    nom_consommateur="individus"
+    ;;
 esac
 case "$station" in
-    hvb) nom_station="HV-B" ;;
-    hva) nom_station="HV-A" ;;
-    lv) nom_station="LV" ;;
+hvb) nom_station="HV-B" ;;
+hva) nom_station="HV-A" ;;
+lv) nom_station="LV" ;;
 esac
 
 echo "Station $nom_station:Capacité:Consommation ($nom_consommateur)" >"$fichier_sortie"
-
 
 temps_dep=$(date +%s)
 
@@ -204,8 +200,6 @@ fi
 #SORTIE DU FICHIER C
 
 temps_minmax=$(date +%s)
-
-
 
 if est_lv_all; then
     if [ ! -f "$FICHIER_MINMAX" ]; then
