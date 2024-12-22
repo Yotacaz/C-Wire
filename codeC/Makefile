@@ -6,4 +6,4 @@ main:
 	$(CC) *.c -o main
 
 clean:
-	rm main
+	rm -f main

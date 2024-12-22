@@ -3,6 +3,8 @@
 **Un projet de groupe d'école pour gérer la distribution sur des réseaux électriques de plusieurs centrales.** (groupe MI3-K)
 Ce projet permet de visualiser la capacité en kWh d'un type de station de distribution d'un réseau électrique et de la consommation des utilisateurs directements branché à celle-ci.
 
+## Utilisation
+
 Pour commencer, ouvrez ce repertoire sur une console, puis executez le fichier shell **c-wire.sh** avec les options voulues :
 
 ```shell
@@ -25,10 +27,12 @@ Exemples d'utilisation :
 
 ___
 
-Notes:
+## Notes
 
-Le fichier de données d’entrée est situé dans le dossier *‘input’*
+**Le programme c n'est pas recompilé à chaque fois** (en accord avec les consignes données), en cas de problème lié à cela, supprimez le fichier executable *'main'* (dans le dossier codeC) ou utilisez la commande `make -s -C codeC clean`.
+
+Le **fichier de données d’entrée** est situé dans le dossier *‘input’*
 Le programme C et tous les fichiers qui s’y rapportent (makefile,exécutable, …) sont situés dans le dossier *‘codeC’*
-Les graphiques, sont stockés dans des images sur le disque dur dans un dossier *‘graphs’*
-Les fichiers temporaire générés par le programe sont crées *'dans'* tmp avant d'être supprimés.
-Les résultats d’exécutions précédentes sont dans le dossier *‘tests’*.
+Aucun graphique n'est généré.
+Aucun fichier temporaire n'est générés par le programe.
+Les résultats des exécutions précédentes sont dans le dossier *‘tests’* (des résultats ont étés pré-générés avec le fichier c-wire_v00.dat dans le dossier *'input'*).
