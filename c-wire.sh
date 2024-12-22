@@ -138,7 +138,7 @@ esac
 
 filtre=""
 if [ -n "$id_centrales" ]; then
-    filtre="^($(echo "$id_centrales" | tr ' ' '|'));"
+    filtre="^($(echo "$id_centrales" | tr ' ' '|'))"
 else
     filtre="^[^;]+"
 fi
@@ -157,6 +157,7 @@ lv)
     ;;
 esac
 
+echo "Filtre: $filtre (fc: $fc)"
 
 #génération du nom du fichier de sortie
 sep_id_centrales=""
