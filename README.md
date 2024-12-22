@@ -20,7 +20,7 @@ En cas d'utilisation en `lv all`, un fichier supplémentaire sera généré, ave
 
 ___
 
-Exemples d'utilisation :
+## Exemples d'utilisation :
 
 - *bash c-wire.sh input/data.csv lv all*
 - *bash c-wire.sh input/data.csv hva comp 1 2*
