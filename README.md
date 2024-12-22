@@ -14,7 +14,7 @@ bash c-wire.sh <chemin> <station> <consommateur> [<centrales>]
 - `chemin` du fichier .csv à traiter (par défaut): *input/nom_du_fichier.csv*
 - `station` à traiter parmis: *hva,hvb,lv*
 - `consomateurs` : *all, indiv, comp*
-- `centrales` (optionnel) : *n° de la centrale* pour laquel le traitement est effectué
+- `centrales` (optionnel) : *n° des centrale* pour lesquelles le traitement est effectué (séparés par des espaces)
 
 En cas d'utilisation en `lv all`, un fichier supplémentaire sera généré, avec les 10 postes lv consommant le plus d'énergie comparé à leur capacité, et les 10 postes lv consommant le moins d'énergie par rapport à leur capacité.
 
@@ -23,7 +23,7 @@ ___
 Exemples d'utilisation :
 
 - *bash c-wire.sh input/data.csv lv all*
-- *bash c-wire.sh input/data.csv hva comp 1*
+- *bash c-wire.sh input/data.csv hva comp 1 2*
 
 ___
 
