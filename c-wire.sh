@@ -152,7 +152,17 @@ case "$station" in
         ;;
 esac
 
+
+sep_id_centrales=""
+if [ -n "$id_centrales" ]; then
+    sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
+fi
+
+
 #génération du nom du fichier de sortie
+fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".csv
+
+#génération de l'en tête du fichier de sortie
 nom_consommateur=""
 case "$consommateur" in
     all)
@@ -165,17 +175,16 @@ case "$consommateur" in
         nom_consommateur="individus"
         ;;
 esac
-sep_id_centrales=""
-if [ -n "$id_centrales" ]; then
-    sep_id_centrales="_""$(echo "$id_centrales" | tr ' ' '_')"
-fi
-fichier_sortie="$CHEMIN_RESULTAT""$station"_"$consommateur""$sep_id_centrales".csv
+case "$station" in
+    hvb) nom_station="HV-B" ;;
+    hva) nom_station="HV-A" ;;
+    lv) nom_station="LV" ;;
+esac
 
-#génération de l'en tête du fichier csv
+echo "Station $nom_station:Capacité:Consommation ($nom_consommateur)" >"$fichier_sortie"
+
 
 temps_dep=$(date +%s)
-
-echo "Station $station:capacite:consommation($nom_consommateur)" >"$fichier_sortie"
 
 cat "$chemin" |
     tail -n+2 |
@@ -210,7 +219,7 @@ if est_lv_all; then
     n_ligne=$(wc -l <<<"$min_max")
 
     #creation de l'en-tête du fichier minmax
-    echo "Station lv:capacite:consommation(tous):consommation en trop" >"$FICHIER_MINMAX"
+    echo "Station LV:Capacité:consommation (tous):consommation en trop" >"$FICHIER_MINMAX"
     #copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
     if [ "$n_ligne" -lt 21 ]; then
         cat <<<"$min_max" >>"$FICHIER_MINMAX"

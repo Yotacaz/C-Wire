@@ -15,7 +15,10 @@ int main(int argc, char const *argv[]) {
     //traitement des données
     pAVL avl = NULL;
     avl = transfert_donne_ds_AVL(avl);
-    assert(avl);    //Il doit y avoir au moins une station dans l'AVL
+    if (!avl) {     //Il doit y avoir au moins une station dans l'AVL
+        fprintf(stderr, "Erreur probable : l'AVL est vide\n");
+        exit(1);
+    }
 
     //affichage des données (et écriture dans un fichier si un nom de fichier est passé en argument)
     affichage_infixe(avl);
