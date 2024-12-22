@@ -7,8 +7,6 @@ CHEMIN_FICHIER_TEMP="tmp/"
 CHEMIN_GRAPH="graphs/"
 CHEMIN_INPUT="input/"
 
-FICHIER_MINMAX=$CHEMIN_RESULTAT"lv_all_minmax.csv"
-
 NOM_EXECUTABLE="main"
 NOM_MAKEFILE="Makefile"
 
@@ -100,14 +98,6 @@ mkdir -p $CHEMIN_RESULTAT
 mkdir -p $CHEMIN_GRAPH
 mkdir -p $CHEMIN_INPUT
 
-#Si on doit creer le fichier lv_all_minmax
-#alors son chemin absolu est non vide (norme prise ici)
-chemin_absolut_minmax=""
-if est_lv_all; then
-    rm -f "$FICHIER_MINMAX"
-    chemin_absolut_minmax=$(pwd)"/$FICHIER_MINMAX"
-fi
-
 #compilation
 #Noter que le programme C n'est pas nécessairement recompilé à chaque fois (voir readme)
 #TODO A SUPPRIMER
@@ -192,7 +182,18 @@ esac
 
 echo "Station $nom_station:Capacité:Consommation ($nom_consommateur)" >"$fichier_sortie"
 
-#Début de l'execution de l'application
+#fichier minmax
+#Si on doit creer le fichier lv_all_minmax
+#alors son chemin absolu est non vide (norme prise ici)
+
+fichier_minmax=""
+chemin_absolut_minmax=""    #utilisé par le programme C
+if est_lv_all; then
+    fichier_minmax="${CHEMIN_RESULTAT}lv_all${sep_id_centrales}_minmax.csv"
+    chemin_absolut_minmax=$(pwd)"/$fichier_minmax"
+fi
+
+#FIN DE LA PHASE DE PREPARATION
 temps_dep=$(date +%s) #temps de départ (chronométrage)
 
 #filtrage des données envoyées au programme c et execution
@@ -219,34 +220,34 @@ done
 temps_minmax=$(date +%s) #chronométrage début de création du fichier minmax
 
 if est_lv_all; then
-    if [ ! -f "$FICHIER_MINMAX" ]; then
-        echo "ERREUR lors de la creation du fichier $FICHIER_MINMAX (fichier inexistant)"
+    if [ ! -f "$fichier_minmax" ]; then
+        echo "ERREUR lors de la creation du fichier $fichier_minmax (fichier inexistant)"
         echo "Terminé avec des erreurs en $(($(date +%s) - "$temps_dep"))s"
         exit 1
     fi
 
     #tris numérique en fonction de la 4eme colonne (conso en trop), séparées par des ':'
 
-    min_max=$(sort -n --key=4 --field-separator=':' "$FICHIER_MINMAX")
+    min_max=$(sort -n --key=4 --field-separator=':' "$fichier_minmax")
     n_ligne=$(wc -l <<<"$min_max")
 
     #creation de l'en-tête du fichier minmax
-    printf "Nœuds extrêmes de « charge de capacité » minimale et maximale (consommation en trop)\n'Station LV:Capacité:consommation (tous):charge de capacité\n" >"$FICHIER_MINMAX"
+    printf "Nœuds extrêmes de « charge de capacité » minimale et maximale (consommation en trop)\n'Station LV:Capacité:consommation (tous):charge de capacité\n" >"$fichier_minmax"
 
     #copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
     if [ "$n_ligne" -lt 21 ]; then
-        cat <<<"$min_max" >>"$FICHIER_MINMAX"
+        cat <<<"$min_max" >>"$fichier_minmax"
     else
-        head -n 10 <<<"$min_max" >>"$FICHIER_MINMAX"
-        tail -n 10 <<<"$min_max" >>"$FICHIER_MINMAX"
+        head -n 10 <<<"$min_max" >>"$fichier_minmax"
+        tail -n 10 <<<"$min_max" >>"$fichier_minmax"
     fi
 fi
 
 #affichage des temps d'execution
 temps_tot=$(date +%s) #temps de fin d'execution (chronométrage)
 
-echo "Succès. Temps d'execution total : $(("$temps_tot" - "$temps_dep"))"
+echo "Succès. Temps d'execution total : $(("$temps_tot" - "$temps_dep"))s"
 
 if est_lv_all; then
-    echo "Temps de creation du fichier $FICHIER_MINMAX : $(("$temps_tot" - "$temps_minmax"))"
+    echo "Temps de creation du fichier $fichier_minmax : $(("$temps_tot" - "$temps_minmax"))s"
 fi

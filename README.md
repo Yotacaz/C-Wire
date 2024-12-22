@@ -29,7 +29,11 @@ ___
 
 ## Notes
 
-**Le programme c n'est pas recompilé à chaque fois** (en accord avec les consignes données), en cas de problème lié à cela, supprimez le fichier executable *'main'* (dans le dossier codeC) ou utilisez la commande `make -s -C codeC clean`.
+**Le programme c n'est pas recompilé à chaque fois** (en accord avec les consignes données), en cas de problème lié à cela, supprimez le fichier executable *'main'* (dans le dossier codeC) ou utilisez la commande
+
+```shell
+make -s -C codeC clean
+```
 
 Le **fichier de données d’entrée** est situé dans le dossier *‘input’*
 Le programme C et tous les fichiers qui s’y rapportent (makefile,exécutable, …) sont situés dans le dossier *‘codeC’*
