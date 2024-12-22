@@ -232,7 +232,7 @@ if est_lv_all; then
     n_ligne=$(wc -l <<<"$min_max")
 
     #creation de l'en-tête du fichier minmax
-    printf "Nœuds extrêmes de « charge de capacité » minimale et maximale (consommation en trop)\n'Station LV:Capacité:consommation (tous):charge de capacité\n" >"$fichier_minmax"
+    printf "Nœuds extrêmes de « charge de capacité » minimale et maximale (consommation en trop)\nStation LV:Capacité:consommation (tous):charge de capacité\n" >"$fichier_minmax"
 
     #copie des résultats dans le fichier de resultat (lv_all_minmax.csv)
     if [ "$n_ligne" -lt 21 ]; then
